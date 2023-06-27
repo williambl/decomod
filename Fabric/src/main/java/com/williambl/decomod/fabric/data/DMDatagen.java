@@ -7,13 +7,14 @@ import net.fabricmc.fabric.api.datagen.v1.provider.*;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.ItemModelGenerators;
+import net.minecraft.data.models.blockstates.*;
 import net.minecraft.data.models.model.ModelTemplate;
-import net.minecraft.data.models.model.ModelTemplates;
 import net.minecraft.data.models.model.TextureMapping;
 import net.minecraft.data.models.model.TextureSlot;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -42,6 +43,14 @@ public class DMDatagen implements DataGeneratorEntrypoint {
         private static final ModelTemplate DOOR_TOP_LEFT = createModelTemplate("door_top_left", "_top_left", TextureSlot.TOP);
         private static final ModelTemplate DOOR_TOP_RIGHT = createModelTemplate("door_top_right", "_top_right", TextureSlot.TOP);
 
+        private static final TextureSlot PANEL_TEXTURE = TextureSlot.create("panel");
+        private static final TextureSlot POST_TEXTURE = TextureSlot.create("post");
+        private static final ModelTemplate FENCE_PANEL = createModelTemplate("fence_panel", "_panel", PANEL_TEXTURE);
+        private static final ModelTemplate FENCE_CORNER = createModelTemplate("fence_corner", "_corner", PANEL_TEXTURE);
+        private static final ModelTemplate FENCE_END = createModelTemplate("fence_end", "_end", PANEL_TEXTURE, POST_TEXTURE);
+        private static final ModelTemplate FENCE_POST = createModelTemplate("fence_post", "_post", POST_TEXTURE);
+
+
         public DMModels(FabricDataGenerator dataGenerator) {
             super(dataGenerator);
         }
@@ -56,9 +65,54 @@ public class DMDatagen implements DataGeneratorEntrypoint {
             generators.blockStateOutput.accept(BlockModelGenerators.createDoor(block, bottomLeft, bottomRight, bottomRight, bottomLeft, topLeft, topRight, topRight, topLeft));
         }
 
+        private void createIronFence(Block block, BlockModelGenerators generators) {
+            TextureMapping textureMapping = new TextureMapping().put(PANEL_TEXTURE, TextureMapping.getBlockTexture(block, "_panel")).put(POST_TEXTURE, TextureMapping.getBlockTexture(block, "_post"));
+            ResourceLocation panel = FENCE_PANEL.create(block, textureMapping, generators.modelOutput);
+            ResourceLocation corner = FENCE_CORNER.create(block, textureMapping, generators.modelOutput);
+            ResourceLocation end = FENCE_END.create(block, textureMapping, generators.modelOutput);
+            ResourceLocation post = FENCE_POST.create(block, textureMapping, generators.modelOutput);
+            generators.createSimpleFlatItemModel(block.asItem());
+            generators.blockStateOutput.accept(MultiPartGenerator.multiPart(block)
+                    .with(  // panel e-w
+                            Condition.condition().term(BlockStateProperties.EAST, true).term(BlockStateProperties.WEST, true),
+                            Variant.variant().with(VariantProperties.MODEL, panel))
+                    .with(  // panel n-s
+                            Condition.condition().term(BlockStateProperties.NORTH, true).term(BlockStateProperties.SOUTH, true),
+                            Variant.variant().with(VariantProperties.MODEL, panel).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90))
+                    .with(  // only east connected
+                            Condition.condition().term(BlockStateProperties.NORTH, false).term(BlockStateProperties.SOUTH, false).term(BlockStateProperties.EAST, true).term(BlockStateProperties.WEST, false),
+                            Variant.variant().with(VariantProperties.MODEL, end))
+                    .with(  // only south connected
+                            Condition.condition().term(BlockStateProperties.NORTH, false).term(BlockStateProperties.SOUTH, true).term(BlockStateProperties.EAST, false).term(BlockStateProperties.WEST, false),
+                            Variant.variant().with(VariantProperties.MODEL, end).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90))
+                    .with(  // only west connected
+                            Condition.condition().term(BlockStateProperties.NORTH, false).term(BlockStateProperties.SOUTH, false).term(BlockStateProperties.EAST, false).term(BlockStateProperties.WEST, true),
+                            Variant.variant().with(VariantProperties.MODEL, end).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180))
+                    .with(  // only north connected
+                            Condition.condition().term(BlockStateProperties.NORTH, true).term(BlockStateProperties.SOUTH, false).term(BlockStateProperties.EAST, false).term(BlockStateProperties.WEST, false),
+                            Variant.variant().with(VariantProperties.MODEL, end).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270))
+                    .with(  // north-west corner
+                            Condition.condition().term(BlockStateProperties.NORTH, true).term(BlockStateProperties.WEST, true),
+                            Variant.variant().with(VariantProperties.MODEL, corner))
+                    .with(  // north-east corner
+                            Condition.condition().term(BlockStateProperties.NORTH, true).term(BlockStateProperties.EAST, true),
+                            Variant.variant().with(VariantProperties.MODEL, corner).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90))
+                    .with(  // east-south corner
+                            Condition.condition().term(BlockStateProperties.SOUTH, true).term(BlockStateProperties.EAST, true),
+                            Variant.variant().with(VariantProperties.MODEL, corner).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180))
+                    .with(  // south-west corner
+                            Condition.condition().term(BlockStateProperties.SOUTH, true).term(BlockStateProperties.WEST, true),
+                            Variant.variant().with(VariantProperties.MODEL, corner).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270))
+                    .with(  // no connections
+                            Condition.condition().term(BlockStateProperties.NORTH, false).term(BlockStateProperties.SOUTH, false).term(BlockStateProperties.EAST, false).term(BlockStateProperties.WEST, false),
+                            Variant.variant().with(VariantProperties.MODEL, post))
+            );
+        }
+
         @Override
         public void generateBlockStateModels(BlockModelGenerators blockStateModelGenerator) {
             createDoor(DMRegistry.CUSTOM_DOOR.getFirst().get(), blockStateModelGenerator);
+            createIronFence(DMRegistry.IRON_FENCE.get(), blockStateModelGenerator);
         }
 
         @Override

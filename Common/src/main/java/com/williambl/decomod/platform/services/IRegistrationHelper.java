@@ -23,6 +23,11 @@ import java.util.function.Supplier;
 public interface IRegistrationHelper {
     public <T extends Item> Supplier<T> registerItem(String name, Supplier<T> sup);
     public <T extends Block> Supplier<T> registerBlock(String name, Supplier<T> sup);
+    default  <T extends Block> Supplier<T> registerBlock(String name, Supplier<T> sup, Item.Properties itemProps) {
+        var block = this.registerBlock(name, sup);
+        this.registerItem(name, () -> new BlockItem(block.get(), itemProps));
+        return block;
+    }
     default <T extends DoorBlock> Pair<Supplier<T>, Supplier<DoubleHighBlockItem>> registerDoor(String name, Supplier<T> doorSup, Item.Properties itemProps) {
         var block = this.registerBlock(name, doorSup);
         var item = this.registerItem(name, () -> new DoubleHighBlockItem(block.get(), itemProps));
