@@ -4,6 +4,7 @@ import com.mojang.datafixers.types.Func;
 import com.mojang.datafixers.util.Pair;
 import com.williambl.decomod.platform.Services;
 import com.williambl.decomod.wallpaper.*;
+import net.minecraft.Util;
 import net.minecraft.core.Registry;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.DoubleHighBlockItem;
@@ -17,6 +18,8 @@ import net.minecraft.world.level.block.IronBarsBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -34,8 +37,15 @@ public class DMRegistry {
     public static final Supplier<WallpaperScraperItem> WALLPAPER_SCRAPER =
             Services.REGISTRATION_HELPER.registerItem("wallpaper_scraper", () -> new WallpaperScraperItem(new Item.Properties().stacksTo(1)));
 
-    public static final Function<WallpaperType, WallpaperApplierItem> WALLPAPER_ITEMS =
-            Services.WALLPAPERS.registerItemsForWallpapers();
+    public static final Function<WallpaperType, Supplier<WallpaperApplierItem>> WALLPAPER_ITEMS = Util.make(() -> {
+        Map<WallpaperType, Supplier<WallpaperApplierItem>> map = new HashMap<>();
+        Services.REGISTRATION_HELPER.forAllRegistered(WALLPAPER_REGISTRY.get(), (wallpaperType, wallpaperId) -> {
+            var id = id("wallpaper/"+wallpaperId.getNamespace()+"/"+wallpaperId.getPath());
+            var item = Services.REGISTRATION_HELPER.registerItem(id, () -> new WallpaperApplierItem(new Item.Properties(), wallpaperType));
+            map.put(wallpaperType, item);
+        });
+        return map::get;
+    });
 
     public static final Supplier<WallpaperingTableBlock> WALLPAPERING_TABLE_BLOCK =
             Services.REGISTRATION_HELPER.registerBlock("wallpapering_table", () -> new WallpaperingTableBlock(BlockBehaviour.Properties.copy(Blocks.CARTOGRAPHY_TABLE)));

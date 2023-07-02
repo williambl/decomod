@@ -2,10 +2,12 @@ package com.williambl.decomod.fabric.platform;
 
 import com.williambl.decomod.platform.services.IRegistrationHelper;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
+import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -22,6 +24,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
@@ -31,6 +34,12 @@ public class FabricRegistrationHelper implements IRegistrationHelper {
     @Override
     public <T extends Item> Supplier<T> registerItem(String name, Supplier<T> sup) {
         final var res = Registry.register(Registry.ITEM, id(name), sup.get());
+        return () -> res;
+    }
+
+    @Override
+    public <T extends Item> Supplier<T> registerItem(ResourceLocation name, Supplier<T> sup) {
+        final var res = Registry.register(Registry.ITEM, name, sup.get());
         return () -> res;
     }
 
@@ -74,5 +83,15 @@ public class FabricRegistrationHelper implements IRegistrationHelper {
     public <T extends AbstractContainerMenu> Supplier<MenuType<T>> registerMenuType(String name, BiFunction<Integer, Inventory, T> factory) {
         final var res = Registry.register(Registry.MENU, id(name), new MenuType<>(factory::apply));
         return () -> res;
+    }
+
+    @Override
+    public <T> void forAllRegistered(Registry<T> registry, BiConsumer<T, ResourceLocation> consumer) {
+        registry.holders().forEach(holder -> {
+            consumer.accept(holder.value(), holder.key().location());
+        });
+        RegistryEntryAddedCallback.event(registry).register((rawId, id, object) -> {
+            consumer.accept(object, id);
+        });
     }
 }

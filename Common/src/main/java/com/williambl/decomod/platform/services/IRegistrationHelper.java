@@ -3,7 +3,9 @@ package com.williambl.decomod.platform.services;
 import com.mojang.datafixers.util.Pair;
 import com.williambl.decomod.wallpaper.WallpaperingTableMenu;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
@@ -22,11 +24,11 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Set;
-import java.util.function.BiFunction;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 public interface IRegistrationHelper {
     public <T extends Item> Supplier<T> registerItem(String name, Supplier<T> sup);
+    public <T extends Item> Supplier<T> registerItem(ResourceLocation name, Supplier<T> sup);
     public <T extends Block> Supplier<T> registerBlock(String name, Supplier<T> sup);
     default  <T extends Block> Supplier<T> registerBlock(String name, Supplier<T> sup, Item.Properties itemProps) {
         var block = this.registerBlock(name, sup);
@@ -47,4 +49,5 @@ public interface IRegistrationHelper {
     public <T extends AbstractMinecart> Supplier<EntityType<T>> registerMinecartType(String name, EntityType.EntityFactory<T> factory);
     public <T> Supplier<Registry<T>> registerRegistry(String name, Class<T> clazz);
     public <T extends AbstractContainerMenu> Supplier<MenuType<T>> registerMenuType(String name, BiFunction<Integer, Inventory, T> factory);
+    public <T> void forAllRegistered(Registry<T> registry, BiConsumer<T, ResourceLocation> consumer);
 }
