@@ -1,10 +1,14 @@
 package com.williambl.decomod.platform.services;
 
 import com.mojang.datafixers.util.Pair;
+import com.williambl.decomod.wallpaper.WallpaperingTableMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DoubleHighBlockItem;
 import net.minecraft.world.item.Item;
@@ -42,4 +46,5 @@ public interface IRegistrationHelper {
     public <T extends RecipeSerializer<?>> Supplier<T> registerRecipeSerializer(String name, Supplier<T> sup);
     public <T extends AbstractMinecart> Supplier<EntityType<T>> registerMinecartType(String name, EntityType.EntityFactory<T> factory);
     public <T> Supplier<Registry<T>> registerRegistry(String name);
+    public <T extends AbstractContainerMenu> Supplier<MenuType<T>> registerMenuType(String name, BiFunction<Integer, Inventory, T> factory);
 }
