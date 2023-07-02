@@ -2,6 +2,8 @@ package com.williambl.decomod;
 
 import com.mojang.datafixers.util.Pair;
 import com.williambl.decomod.platform.Services;
+import com.williambl.decomod.wallpaper.WallpaperType;
+import net.minecraft.core.Registry;
 import net.minecraft.world.item.DoubleHighBlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Blocks;
@@ -16,4 +18,7 @@ public class DMRegistry {
             Services.REGISTRATION_HELPER.registerDoor("custom_door", BlockBehaviour.Properties.copy(Blocks.ACACIA_DOOR), new Item.Properties());
     public static final Supplier<IronBarsBlock> IRON_FENCE =
             Services.REGISTRATION_HELPER.registerBlock("iron_fence", () -> new IronBarsBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BARS)) {}, new Item.Properties());
+
+    public static final Supplier<Registry<WallpaperType>> WALLPAPER_REGISTRY =
+            Services.REGISTRATION_HELPER.registerRegistry("wallpaper_type");
 }

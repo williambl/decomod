@@ -4,6 +4,7 @@ import com.williambl.decomod.Constants;
 import com.williambl.decomod.platform.services.IIntegrationHelper;
 import com.williambl.decomod.platform.services.IPlatformHelper;
 import com.williambl.decomod.platform.services.IRegistrationHelper;
+import com.williambl.decomod.platform.services.IWallpaperHelper;
 
 import java.util.ServiceLoader;
 
@@ -12,6 +13,7 @@ public class Services {
     public static final IPlatformHelper PLATFORM = load(IPlatformHelper.class);
     public static final IRegistrationHelper REGISTRATION_HELPER = load(IRegistrationHelper.class);
     public static final IIntegrationHelper INTEGRATIONS = load(IIntegrationHelper.class);
+    public static final IWallpaperHelper WALLPAPERS = load(IWallpaperHelper.class);
 
     public static <T> T load(Class<T> clazz) {
 
