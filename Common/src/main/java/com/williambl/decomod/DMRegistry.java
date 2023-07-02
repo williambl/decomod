@@ -29,7 +29,7 @@ public class DMRegistry {
             Services.REGISTRATION_HELPER.registerBlock("iron_fence", () -> new IronBarsBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BARS)) {}, new Item.Properties());
 
     public static final Supplier<Registry<WallpaperType>> WALLPAPER_REGISTRY =
-            Services.REGISTRATION_HELPER.registerRegistry("wallpaper_type");
+            Services.REGISTRATION_HELPER.registerRegistry("wallpaper_type", WallpaperType.class);
 
     public static final Supplier<WallpaperScraperItem> WALLPAPER_SCRAPER =
             Services.REGISTRATION_HELPER.registerItem("wallpaper_scraper", () -> new WallpaperScraperItem(new Item.Properties().stacksTo(1)));

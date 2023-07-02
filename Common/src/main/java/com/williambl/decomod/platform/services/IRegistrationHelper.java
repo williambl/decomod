@@ -45,6 +45,6 @@ public interface IRegistrationHelper {
     public <T extends RecipeType<?>> Supplier<T> registerRecipeType(String name, Supplier<T> sup);
     public <T extends RecipeSerializer<?>> Supplier<T> registerRecipeSerializer(String name, Supplier<T> sup);
     public <T extends AbstractMinecart> Supplier<EntityType<T>> registerMinecartType(String name, EntityType.EntityFactory<T> factory);
-    public <T> Supplier<Registry<T>> registerRegistry(String name);
+    public <T> Supplier<Registry<T>> registerRegistry(String name, Class<T> clazz);
     public <T extends AbstractContainerMenu> Supplier<MenuType<T>> registerMenuType(String name, BiFunction<Integer, Inventory, T> factory);
 }

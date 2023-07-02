@@ -20,11 +20,15 @@ public class WallpaperApplierItem extends Item {
             return InteractionResult.SUCCESS;
         }
 
-        Services.WALLPAPERS.getWallpaperChunk(ctx.getLevel().getChunk(ctx.getClickedPos()))
-                .addWallpaper(ctx.getClickedPos().immutable(), ctx.getClickedFace(), this.type);
+        var wallpaperChunk = Services.WALLPAPERS.getWallpaperChunk(ctx.getLevel().getChunk(ctx.getClickedPos()));
+        if (wallpaperChunk != null) {
+            wallpaperChunk.addWallpaper(ctx.getClickedPos().immutable(), ctx.getClickedFace(), this.type);
 
-        ctx.getItemInHand().shrink(1);
-        return InteractionResult.SUCCESS;
+            ctx.getItemInHand().shrink(1);
+            return InteractionResult.SUCCESS;
+        }
+
+        return InteractionResult.PASS;
     }
 
     @Override

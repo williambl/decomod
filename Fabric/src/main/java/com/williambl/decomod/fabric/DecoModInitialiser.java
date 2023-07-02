@@ -5,13 +5,12 @@ import com.williambl.decomod.DecoMod;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.world.entity.vehicle.AbstractMinecart;
 
-public class DecoModInitialiser implements ModInitializer, EntityComponentInitializer {
+public class DecoModInitialiser implements ModInitializer, EntityComponentInitializer, ChunkComponentInitializer {
     
     @Override
     public void onInitialize() {
-        Constants.LOG.info("Hello Fabric world!");
+        Constants.LOGGER.info("Hello Fabric world!");
         DecoMod.init();
     }
 

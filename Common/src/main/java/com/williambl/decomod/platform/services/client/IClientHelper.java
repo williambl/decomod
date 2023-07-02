@@ -24,4 +24,5 @@ public interface IClientHelper {
     void registerBlockRenderType(Block block, RenderType type);
     void registerLayerDefinition(ModelLayerLocation location, Supplier<LayerDefinition> createModel);
     <T extends AbstractContainerMenu, U extends Screen & MenuAccess<T>> void registerMenuScreen(MenuType<T> menuType, MenuScreens.ScreenConstructor<T, U> screenConstructor);
+    void registerWallpaperRenderer();
 }

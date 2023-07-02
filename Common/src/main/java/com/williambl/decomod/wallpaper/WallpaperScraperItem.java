@@ -18,9 +18,12 @@ public class WallpaperScraperItem extends Item {
             return InteractionResult.SUCCESS;
         }
 
-        Services.WALLPAPERS.getWallpaperChunk(ctx.getLevel().getChunk(ctx.getClickedPos()))
-                .removeWallpaper(ctx.getClickedPos().immutable(), ctx.getClickedFace());
+        var wallpaperChunk = Services.WALLPAPERS.getWallpaperChunk(ctx.getLevel().getChunk(ctx.getClickedPos()));
+        if (wallpaperChunk != null) {
+            wallpaperChunk.removeWallpaper(ctx.getClickedPos().immutable(), ctx.getClickedFace());
+            return InteractionResult.SUCCESS;
+        }
 
-        return InteractionResult.SUCCESS;
+        return InteractionResult.PASS;
     }
 }

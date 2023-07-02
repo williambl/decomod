@@ -1,6 +1,7 @@
 package com.williambl.decomod.fabric.platform;
 
 import com.williambl.decomod.platform.services.IRegistrationHelper;
+import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.core.BlockPos;
@@ -8,7 +9,10 @@ import net.minecraft.core.Registry;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -60,4 +64,15 @@ public class FabricRegistrationHelper implements IRegistrationHelper {
         return () -> res;
     }
 
+    @Override
+    public <T> Supplier<Registry<T>> registerRegistry(String name, Class<T> clazz) {
+        final var res = FabricRegistryBuilder.createSimple(clazz, id(name)).buildAndRegister();
+        return () -> res;
+    }
+
+    @Override
+    public <T extends AbstractContainerMenu> Supplier<MenuType<T>> registerMenuType(String name, BiFunction<Integer, Inventory, T> factory) {
+        final var res = Registry.register(Registry.MENU, id(name), new MenuType<>(factory::apply));
+        return () -> res;
+    }
 }

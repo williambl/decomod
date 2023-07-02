@@ -1,10 +1,18 @@
 package com.williambl.decomod.fabric.platform.client;
 
+import com.williambl.decomod.client.ExtendedModelManager;
+import com.williambl.decomod.client.ExtendedViewArea;
+import com.williambl.decomod.client.WallpaperRenderer;
 import com.williambl.decomod.platform.services.client.IClientHelper;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -14,6 +22,8 @@ import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.data.models.model.TexturedModel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.level.block.Block;
 
 import java.util.function.Supplier;
@@ -31,6 +41,31 @@ public class FabricClientHelper implements IClientHelper {
 
     @Override
     public void registerLayerDefinition(ModelLayerLocation location, Supplier<LayerDefinition> createModel) {
-        EntityModelLayerRegistry.registerModelLayer(location, () -> createModel.get());
+        EntityModelLayerRegistry.registerModelLayer(location, createModel::get);
+    }
+
+    @Override
+    public <T extends AbstractContainerMenu, U extends Screen & MenuAccess<T>> void registerMenuScreen(MenuType<T> menuType, MenuScreens.ScreenConstructor<T, U> screenConstructor) {
+        MenuScreens.register(menuType, screenConstructor);
+    }
+
+    @Override
+    public void registerWallpaperRenderer() {
+        WorldRenderEvents.AFTER_ENTITIES.register(ctx -> {
+            var poseStack = ctx.matrixStack();
+            var buffers = ctx.consumers();
+            var modelRenderer = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
+            var level = ctx.world();
+            var modelManager = ((ExtendedModelManager)Minecraft.getInstance().getModelManager());
+            var viewArea = ((ExtendedViewArea) ctx.worldRenderer().viewArea);
+            WallpaperRenderer.renderWallpapers(
+                    poseStack,
+                    buffers,
+                    modelRenderer,
+                    level,
+                    modelManager,
+                    viewArea
+            );
+        });
     }
 }
