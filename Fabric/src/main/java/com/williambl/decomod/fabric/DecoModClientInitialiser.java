@@ -3,7 +3,6 @@ package com.williambl.decomod.fabric;
 import com.williambl.decomod.Constants;
 import com.williambl.decomod.DecoModClient;
 import com.williambl.decomod.client.ExtendedModelManager;
-import com.williambl.decomod.client.ExtendedViewArea;
 import com.williambl.decomod.client.WallpaperRenderer;
 import com.williambl.decomod.platform.Services;
 import net.fabricmc.api.ClientModInitializer;

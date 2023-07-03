@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.williambl.decomod.platform.Services;
 import com.williambl.decomod.wallpaper.WallpaperChunk;
+import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
@@ -22,6 +23,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public final class WallpaperRenderer {
     public static void renderWallpapers(
@@ -30,22 +34,33 @@ public final class WallpaperRenderer {
             ModelBlockRenderer modelRenderer,
             Level level,
             ExtendedModelManager modelManager,
-            ExtendedViewArea viewArea
+            Camera camera,
+            int chunkViewDistance
     ) {
-        for (var chunkPos : viewArea.visibleChunkPositions()) {
+        poseStack.pushPose();
+        poseStack.translate(-camera.getPosition().x(), -camera.getPosition().y(), -camera.getPosition().z());
+        getChunkPositions(camera, chunkViewDistance).forEach(chunkPos -> {
             var wallpaperChunk = Services.WALLPAPERS.getWallpaperChunk(level, chunkPos);
-            if (wallpaperChunk == null) {
-                continue;
+            if (wallpaperChunk != null) {
+                WallpaperRenderer.renderWallpapersForChunk(
+                        poseStack,
+                        buffers,
+                        modelRenderer,
+                        level,
+                        modelManager,
+                        wallpaperChunk
+                );
             }
-            WallpaperRenderer.renderWallpapersForChunk(
-                    poseStack,
-                    buffers,
-                    modelRenderer,
-                    level,
-                    modelManager,
-                    wallpaperChunk
-            );
-        }
+        });
+        poseStack.popPose();
+    }
+
+    private static Stream<ChunkPos> getChunkPositions(Camera camera, int chunkViewDistance) {
+        int minChunkX = (camera.getBlockPosition().getX() >> 4) - chunkViewDistance;
+        int minChunkZ = (camera.getBlockPosition().getZ() >> 4) - chunkViewDistance;
+        return IntStream.rangeClosed(minChunkX, minChunkX+1+(2*chunkViewDistance))
+                .mapToObj(x -> IntStream.rangeClosed(minChunkZ, minChunkZ+1+(2*chunkViewDistance)).mapToObj(z -> new ChunkPos(x, z)))
+                .flatMap(Function.identity());
     }
 
 
@@ -55,6 +70,7 @@ public final class WallpaperRenderer {
                                           BlockAndTintGetter level,
                                           ExtendedModelManager modelManager,
                                           WallpaperChunk wallpaperChunk) {
+        stack.pushPose();
         for (var block : wallpaperChunk) {
             var pos = block.getKey();
             int blockLight = level.getBrightness(LightLayer.BLOCK, pos);
@@ -85,5 +101,6 @@ public final class WallpaperRenderer {
                 );
             }
         }
+        stack.popPose();
     }
 }

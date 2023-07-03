@@ -2,10 +2,16 @@ package com.williambl.decomod.forge.platform;
 
 import com.williambl.decomod.Constants;
 import com.williambl.decomod.platform.services.IRegistrationHelper;
+import com.williambl.decomod.wallpaper.WallpaperType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -17,6 +23,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
@@ -32,6 +39,11 @@ public class ForgeRegistrationHelper implements IRegistrationHelper {
     @Override
     public <T extends Item> Supplier<T> registerItem(String name, Supplier<T> sup) {
         return this.items.register(name, sup);
+    }
+
+    @Override
+    public <T extends Item> Supplier<T> registerItem(ResourceLocation name, Supplier<T> sup) {
+        return null;
     }
 
     @Override
@@ -57,5 +69,25 @@ public class ForgeRegistrationHelper implements IRegistrationHelper {
     @Override
     public <T extends AbstractMinecart> Supplier<EntityType<T>> registerMinecartType(String name, EntityType.EntityFactory<T> factory) {
         return this.entityTypes.register(name, () -> EntityType.Builder.of(factory, MobCategory.MISC).sized(0.98F, 0.7F).clientTrackingRange(8).build(null));
+    }
+
+    @Override
+    public <T> Supplier<Registry<T>> registerRegistry(String name, Class<T> clazz) {
+        return null;
+    }
+
+    @Override
+    public <T extends AbstractContainerMenu> Supplier<MenuType<T>> registerMenuType(String name, BiFunction<Integer, Inventory, T> factory) {
+        return null;
+    }
+
+    @Override
+    public <T extends WallpaperType> Supplier<T> registerWallpaperType(String name, Supplier<T> sup) {
+        return null;
+    }
+
+    @Override
+    public <T> void forAllRegistered(Registry<T> registry, BiConsumer<T, ResourceLocation> consumer) {
+
     }
 }

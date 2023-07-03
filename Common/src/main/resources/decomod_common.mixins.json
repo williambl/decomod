@@ -6,6 +6,7 @@
     "mixins": [
     ],
     "client": [
+        "client.wallpaper.ModelManagerMixin"
     ],
     "injectors": {
         "defaultRequire": 1

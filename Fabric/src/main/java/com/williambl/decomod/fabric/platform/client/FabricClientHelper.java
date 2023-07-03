@@ -1,7 +1,6 @@
 package com.williambl.decomod.fabric.platform.client;
 
 import com.williambl.decomod.client.ExtendedModelManager;
-import com.williambl.decomod.client.ExtendedViewArea;
 import com.williambl.decomod.client.WallpaperRenderer;
 import com.williambl.decomod.fabric.DecoModRuntimeResourcePack;
 import com.williambl.decomod.platform.services.client.IClientHelper;
@@ -61,14 +60,16 @@ public class FabricClientHelper implements IClientHelper {
             var modelRenderer = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
             var level = ctx.world();
             var modelManager = ((ExtendedModelManager)Minecraft.getInstance().getModelManager());
-            var viewArea = ((ExtendedViewArea) ctx.worldRenderer().viewArea);
+            var camera = ctx.camera();
+            int viewDistance = Minecraft.getInstance().options.getEffectiveRenderDistance();
             WallpaperRenderer.renderWallpapers(
                     poseStack,
                     buffers,
                     modelRenderer,
                     level,
                     modelManager,
-                    viewArea
+                    camera,
+                    viewDistance
             );
         });
     }
