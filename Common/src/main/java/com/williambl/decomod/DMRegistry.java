@@ -64,6 +64,9 @@ public class DMRegistry {
     public static final Supplier<MenuType<WallpaperingTableMenu>> WALLPAPERING_TABLE_MENU =
             Services.REGISTRATION_HELPER.registerMenuType("wallpapering_table", WallpaperingTableMenu::new);
 
-    public static final Supplier<WallpaperType> TEST_wALLPAPER =
+    public static final Supplier<WallpaperType> TEST_WALLPAPER =
             Services.REGISTRATION_HELPER.registerWallpaperType("test", WallpaperType::new);
+
+    public static final Supplier<WallpaperType> IRON_BAND =
+            Services.REGISTRATION_HELPER.registerWallpaperType("iron_band", WallpaperType::new);
 }

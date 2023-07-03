@@ -1,10 +1,13 @@
 package com.williambl.decomod.fabric.data;
 
 import com.williambl.decomod.DMRegistry;
+import com.williambl.decomod.wallpaper.WallpaperingRecipe;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.*;
 import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.CriterionTrigger;
+import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.ItemModelGenerators;
 import net.minecraft.data.models.blockstates.*;
@@ -13,6 +16,8 @@ import net.minecraft.data.models.model.TextureMapping;
 import net.minecraft.data.models.model.TextureSlot;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
@@ -147,6 +152,9 @@ public class DMDatagen implements DataGeneratorEntrypoint {
 
         @Override
         protected void generateRecipes(Consumer<FinishedRecipe> exporter) {
+            WallpaperingRecipe.Builder.wallpapering(Ingredient.of(Items.IRON_INGOT), Ingredient.of(Items.IRON_INGOT), DMRegistry.WALLPAPER_ITEMS.apply(DMRegistry.IRON_BAND.get()).get())
+                    .unlocks("has_iron", has(Items.IRON_INGOT))
+                    .save(exporter, id("iron_band"));
         }
     }
 

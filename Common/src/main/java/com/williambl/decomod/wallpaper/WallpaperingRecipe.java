@@ -1,16 +1,27 @@
 package com.williambl.decomod.wallpaper;
 
 import com.google.gson.JsonObject;
-import net.minecraft.nbt.CompoundTag;
+import com.williambl.decomod.DMRegistry;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementRewards;
+import net.minecraft.advancements.CriterionTriggerInstance;
+import net.minecraft.advancements.RequirementsStrategy;
+import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.core.Registry;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class WallpaperingRecipe implements Recipe<Container> {
@@ -52,7 +63,7 @@ public class WallpaperingRecipe implements Recipe<Container> {
 
     @Override
     public ItemStack getToastSymbol() {
-        return new ItemStack(Blocks.SMITHING_TABLE);
+        return new ItemStack(DMRegistry.WALLPAPERING_TABLE_BLOCK.get());
     }
 
     @Override
@@ -62,12 +73,12 @@ public class WallpaperingRecipe implements Recipe<Container> {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return RecipeSerializer.SMITHING;
+        return DMRegistry.WALLPAPERING_RECIPE_SERIALIZER.get();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return RecipeType.SMITHING;
+        return DMRegistry.WALLPAPERING_RECIPE_TYPE.get();
     }
 
     @Override
@@ -97,6 +108,99 @@ public class WallpaperingRecipe implements Recipe<Container> {
             recipe.ingredientA.toNetwork(buf);
             recipe.ingredientB.toNetwork(buf);
             buf.writeItem(recipe.result);
+        }
+    }
+
+    public static class Builder {
+        private final Ingredient ingredientA;
+        private final Ingredient ingredientB;
+        private final Item result;
+        private final Advancement.Builder advancement = Advancement.Builder.advancement();
+        private final RecipeSerializer<?> type;
+
+        public Builder(RecipeSerializer<?> recipeSerializer, Ingredient ingredientA, Ingredient ingredient2, Item item) {
+            this.type = recipeSerializer;
+            this.ingredientA = ingredientA;
+            this.ingredientB = ingredient2;
+            this.result = item;
+        }
+
+        public static Builder wallpapering(Ingredient ingredient, Ingredient ingredient2, Item item) {
+            return new Builder(DMRegistry.WALLPAPERING_RECIPE_SERIALIZER.get(), ingredient, ingredient2, item);
+        }
+
+        public Builder unlocks(String string, CriterionTriggerInstance criterionTriggerInstance) {
+            this.advancement.addCriterion(string, criterionTriggerInstance);
+            return this;
+        }
+
+        public void save(Consumer<FinishedRecipe> consumer, String string) {
+            this.save(consumer, new ResourceLocation(string));
+        }
+
+        public void save(Consumer<FinishedRecipe> consumer, ResourceLocation resourceLocation) {
+            this.ensureValid(resourceLocation);
+            this.advancement.parent(RecipeBuilder.ROOT_RECIPE_ADVANCEMENT).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(resourceLocation)).rewards(AdvancementRewards.Builder.recipe(resourceLocation)).requirements(RequirementsStrategy.OR);
+            String namespace = resourceLocation.getNamespace();
+            String categoryName = this.result.getItemCategory() == null ? "uncategorised" : this.result.getItemCategory().getRecipeFolderName();
+            consumer.accept(new Builder.Result(resourceLocation, this.type, this.ingredientA, this.ingredientB, this.result, this.advancement, new ResourceLocation(namespace, "recipes/" + categoryName + "/" + resourceLocation.getPath())));
+        }
+
+        private void ensureValid(ResourceLocation resourceLocation) {
+            if (this.advancement.getCriteria().isEmpty()) {
+                throw new IllegalStateException("No way of obtaining recipe " + resourceLocation);
+            }
+        }
+
+        public static class Result implements FinishedRecipe {
+            private final ResourceLocation id;
+            private final Ingredient base;
+            private final Ingredient addition;
+            private final Item result;
+            private final Advancement.Builder advancement;
+            private final ResourceLocation advancementId;
+            private final RecipeSerializer<?> type;
+
+            public Result(ResourceLocation resourceLocation, RecipeSerializer<?> recipeSerializer, Ingredient ingredient, Ingredient ingredient2, Item item, Advancement.Builder builder, ResourceLocation resourceLocation2) {
+                this.id = resourceLocation;
+                this.type = recipeSerializer;
+                this.base = ingredient;
+                this.addition = ingredient2;
+                this.result = item;
+                this.advancement = builder;
+                this.advancementId = resourceLocation2;
+            }
+
+            @Override
+            public void serializeRecipeData(JsonObject jsonObject) {
+                jsonObject.add("ingredient_a", this.base.toJson());
+                jsonObject.add("ingredient_b", this.addition.toJson());
+                JsonObject jsonObject2 = new JsonObject();
+                jsonObject2.addProperty("item", Registry.ITEM.getKey(this.result).toString());
+                jsonObject.add("result", jsonObject2);
+            }
+
+            @Override
+            public ResourceLocation getId() {
+                return this.id;
+            }
+
+            @Override
+            public RecipeSerializer<?> getType() {
+                return this.type;
+            }
+
+            @Override
+            @Nullable
+            public JsonObject serializeAdvancement() {
+                return this.advancement.serializeToJson();
+            }
+
+            @Override
+            @Nullable
+            public ResourceLocation getAdvancementId() {
+                return this.advancementId;
+            }
         }
     }
 }
