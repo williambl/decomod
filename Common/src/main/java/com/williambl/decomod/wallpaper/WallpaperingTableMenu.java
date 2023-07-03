@@ -57,8 +57,8 @@ public class WallpaperingTableMenu extends AbstractContainerMenu {
         super(DMRegistry.WALLPAPERING_TABLE_MENU.get(), syncId);
         this.access = levelAccess;
         this.level = inventory.player.level;
-        this.inputSlotA = this.addSlot(new Slot(this.container, INPUT_SLOT_A, 20, 33));
-        this.inputSlotB = this.addSlot(new Slot(this.container, INPUT_SLOT_B, 30, 33));
+        this.inputSlotA = this.addSlot(new Slot(this.container, INPUT_SLOT_A, 15, 15));
+        this.inputSlotB = this.addSlot(new Slot(this.container, INPUT_SLOT_B, 15, 52));
         this.resultSlot = this.addSlot(new Slot(this.resultContainer, RESULT_SLOT, 143, 33) {
             @Override
             public boolean mayPlace(ItemStack stack) {
