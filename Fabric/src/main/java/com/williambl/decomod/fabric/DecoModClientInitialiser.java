@@ -15,5 +15,6 @@ public class DecoModClientInitialiser implements ClientModInitializer {
     public void onInitializeClient() {
         Constants.LOGGER.info("Hello Fabric Client world!");
         DecoModClient.init();
+        DecoModRuntimeResourcePack.registerResourcePack();
     }
 }

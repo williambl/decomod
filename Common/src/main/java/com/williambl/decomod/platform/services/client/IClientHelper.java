@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.data.models.model.TexturedModel;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -17,6 +18,8 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.level.block.Block;
 
 import java.awt.*;
+import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public interface IClientHelper {
@@ -25,4 +28,6 @@ public interface IClientHelper {
     void registerLayerDefinition(ModelLayerLocation location, Supplier<LayerDefinition> createModel);
     <T extends AbstractContainerMenu, U extends Screen & MenuAccess<T>> void registerMenuScreen(MenuType<T> menuType, MenuScreens.ScreenConstructor<T, U> screenConstructor);
     void registerWallpaperRenderer();
+    void addModelToRuntimeResourcePack(ResourceLocation name, ResourceLocation parent, Map<String, ResourceLocation> textures);
+    void forceLoadModels(Consumer<Consumer<ResourceLocation>> modelConsumer);
 }

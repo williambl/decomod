@@ -3,6 +3,7 @@ package com.williambl.decomod.fabric.platform.client;
 import com.williambl.decomod.client.ExtendedModelManager;
 import com.williambl.decomod.client.ExtendedViewArea;
 import com.williambl.decomod.client.WallpaperRenderer;
+import com.williambl.decomod.fabric.DecoModRuntimeResourcePack;
 import com.williambl.decomod.platform.services.client.IClientHelper;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
@@ -20,12 +21,15 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.data.models.model.TexturedModel;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.level.block.Block;
 
+import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class FabricClientHelper implements IClientHelper {
@@ -66,6 +70,18 @@ public class FabricClientHelper implements IClientHelper {
                     modelManager,
                     viewArea
             );
+        });
+    }
+
+    @Override
+    public void addModelToRuntimeResourcePack(ResourceLocation name, ResourceLocation parent, Map<String, ResourceLocation> textures) {
+        DecoModRuntimeResourcePack.addModel(name, parent, textures);
+    }
+
+    @Override
+    public void forceLoadModels(Consumer<Consumer<ResourceLocation>> modelConsumer) {
+        ModelLoadingRegistry.INSTANCE.registerModelProvider((manager, out) -> {
+            modelConsumer.accept(out);
         });
     }
 }

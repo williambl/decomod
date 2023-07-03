@@ -1,6 +1,7 @@
 package com.williambl.decomod.platform.services;
 
 import com.mojang.datafixers.util.Pair;
+import com.williambl.decomod.wallpaper.WallpaperType;
 import com.williambl.decomod.wallpaper.WallpaperingTableMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -49,5 +50,6 @@ public interface IRegistrationHelper {
     public <T extends AbstractMinecart> Supplier<EntityType<T>> registerMinecartType(String name, EntityType.EntityFactory<T> factory);
     public <T> Supplier<Registry<T>> registerRegistry(String name, Class<T> clazz);
     public <T extends AbstractContainerMenu> Supplier<MenuType<T>> registerMenuType(String name, BiFunction<Integer, Inventory, T> factory);
+    public <T extends WallpaperType> Supplier<T> registerWallpaperType(String name, Supplier<T> sup);
     public <T> void forAllRegistered(Registry<T> registry, BiConsumer<T, ResourceLocation> consumer);
 }

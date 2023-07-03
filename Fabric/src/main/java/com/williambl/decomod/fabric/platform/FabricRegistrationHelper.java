@@ -1,6 +1,8 @@
 package com.williambl.decomod.fabric.platform;
 
+import com.williambl.decomod.DMRegistry;
 import com.williambl.decomod.platform.services.IRegistrationHelper;
+import com.williambl.decomod.wallpaper.WallpaperType;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
@@ -82,6 +84,12 @@ public class FabricRegistrationHelper implements IRegistrationHelper {
     @Override
     public <T extends AbstractContainerMenu> Supplier<MenuType<T>> registerMenuType(String name, BiFunction<Integer, Inventory, T> factory) {
         final var res = Registry.register(Registry.MENU, id(name), new MenuType<>(factory::apply));
+        return () -> res;
+    }
+
+    @Override
+    public <T extends WallpaperType> Supplier<T> registerWallpaperType(String name, Supplier<T> sup) {
+        final var res = Registry.register(DMRegistry.WALLPAPER_REGISTRY.get(), id(name), sup.get());
         return () -> res;
     }
 

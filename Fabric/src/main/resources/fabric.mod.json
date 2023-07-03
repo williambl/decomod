@@ -29,6 +29,9 @@
         "com.williambl.decomod.fabric.data.DMDatagen"
       ],
       "cardinal-components-entity": [
+      ],
+      "cardinal-components-chunk": [
+        "com.williambl.decomod.fabric.DecoModInitialiser"
       ]
     },
     "mixins": [
@@ -46,6 +49,7 @@
     },
   "custom": {
     "cardinal-components": [
+      "decomod:wallpaper"
     ]
   }
   }
