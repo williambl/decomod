@@ -31,7 +31,7 @@ public class DecoModClient {
         });
         Services.REGISTRATION_HELPER.forAllRegistered(DMRegistry.WALLPAPER_REGISTRY.get(), (wallpaperType, wallpaperId) -> {
             var texture = new ResourceLocation(wallpaperId.getNamespace(), "wallpaper/"+wallpaperId.getPath());
-            ClientServices.CLIENT.addModelToRuntimeResourcePack(new ResourceLocation(wallpaperId.getNamespace(), "item/"+wallpaperId.getPath()), new ResourceLocation("item/generated"), Map.of("layer0", texture));
+            ClientServices.CLIENT.addModelToRuntimeResourcePack(id("item/wallpaper/"+wallpaperId.getNamespace()+"/"+wallpaperId.getPath()), new ResourceLocation("item/generated"), Map.of("layer0", texture));
             for (var dir : Direction.values()) {
                 ClientServices.CLIENT.addModelToRuntimeResourcePack(
                         new ResourceLocation(wallpaperId.getNamespace(), "wallpaper/" + wallpaperId.getPath() + "/" + dir.getName()),
