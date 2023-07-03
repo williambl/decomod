@@ -70,12 +70,9 @@ public final class WallpaperRenderer {
                                           BlockAndTintGetter level,
                                           ExtendedModelManager modelManager,
                                           WallpaperChunk wallpaperChunk) {
-        stack.pushPose();
         for (var block : wallpaperChunk) {
+            stack.pushPose();
             var pos = block.getKey();
-            int blockLight = level.getBrightness(LightLayer.BLOCK, pos);
-            int skyLight = level.getBrightness(LightLayer.SKY, pos);
-            int packedLight = LightTexture.pack(blockLight, skyLight);
             stack.translate(pos.getX(), pos.getY(), pos.getZ());
 
             for (var dir : Direction.values()) {
@@ -84,6 +81,9 @@ public final class WallpaperRenderer {
                     continue;
                 }
 
+                int blockLight = level.getBrightness(LightLayer.BLOCK, pos.relative(dir));
+                int skyLight = level.getBrightness(LightLayer.SKY, pos.relative(dir));
+                int packedLight = LightTexture.pack(blockLight, skyLight);
                 int tint = wallpaper.getTint();
                 RenderType renderType = RenderType.cutoutMipped();
                 var vertexConsumer = buffers.getBuffer(renderType);
@@ -100,7 +100,7 @@ public final class WallpaperRenderer {
                         OverlayTexture.NO_OVERLAY
                 );
             }
+            stack.popPose();
         }
-        stack.popPose();
     }
 }
