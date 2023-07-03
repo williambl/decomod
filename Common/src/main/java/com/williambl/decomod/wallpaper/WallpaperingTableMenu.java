@@ -58,7 +58,7 @@ public class WallpaperingTableMenu extends AbstractContainerMenu {
         this.access = levelAccess;
         this.level = inventory.player.level;
         this.inputSlotA = this.addSlot(new Slot(this.container, INPUT_SLOT_A, 20, 33));
-        this.inputSlotB = this.addSlot(new Slot(this.container, INPUT_SLOT_B, 20, 33));
+        this.inputSlotB = this.addSlot(new Slot(this.container, INPUT_SLOT_B, 30, 33));
         this.resultSlot = this.addSlot(new Slot(this.resultContainer, RESULT_SLOT, 143, 33) {
             @Override
             public boolean mayPlace(ItemStack stack) {
@@ -118,7 +118,7 @@ public class WallpaperingTableMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return stillValid(this.access, player, Blocks.STONECUTTER);
+        return stillValid(this.access, player, DMRegistry.WALLPAPERING_TABLE_BLOCK.get());
     }
 
     @Override
@@ -177,7 +177,7 @@ public class WallpaperingTableMenu extends AbstractContainerMenu {
 
     @Override
     public MenuType<?> getType() {
-        return MenuType.STONECUTTER;
+        return DMRegistry.WALLPAPERING_TABLE_MENU.get();
     }
 
     public void registerUpdateListener(Runnable runnable) {
