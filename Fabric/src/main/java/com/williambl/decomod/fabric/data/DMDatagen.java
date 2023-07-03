@@ -16,6 +16,7 @@ import net.minecraft.data.models.model.TextureMapping;
 import net.minecraft.data.models.model.TextureSlot;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
@@ -155,6 +156,45 @@ public class DMDatagen implements DataGeneratorEntrypoint {
             WallpaperingRecipe.Builder.wallpapering(Ingredient.of(Items.IRON_INGOT), Ingredient.of(Items.IRON_INGOT), DMRegistry.WALLPAPER_ITEMS.apply(DMRegistry.IRON_BAND.get()).get())
                     .unlocks("has_iron", has(Items.IRON_INGOT))
                     .save(exporter, id("iron_band"));
+
+            WallpaperingRecipe.Builder.wallpapering(Ingredient.of(Items.ACACIA_PLANKS), Ingredient.of(), new ItemStack(DMRegistry.WALLPAPER_ITEMS.apply(DMRegistry.ACACIA_TRIM.get()).get(), 8))
+                    .unlocks("has_planks", has(Items.ACACIA_PLANKS))
+                    .save(exporter, id("acacia_trim"));
+
+            WallpaperingRecipe.Builder.wallpapering(Ingredient.of(Items.BIRCH_PLANKS), Ingredient.of(), new ItemStack(DMRegistry.WALLPAPER_ITEMS.apply(DMRegistry.BIRCH_TRIM.get()).get(), 8))
+                    .unlocks("has_planks", has(Items.BIRCH_PLANKS))
+                    .save(exporter, id("birch_trim"));
+
+            WallpaperingRecipe.Builder.wallpapering(Ingredient.of(Items.CRIMSON_PLANKS), Ingredient.of(), new ItemStack(DMRegistry.WALLPAPER_ITEMS.apply(DMRegistry.CRIMSON_TRIM.get()).get(), 8))
+                    .unlocks("has_planks", has(Items.CRIMSON_PLANKS))
+                    .save(exporter, id("crimson_trim"));
+
+            WallpaperingRecipe.Builder.wallpapering(Ingredient.of(Items.DARK_OAK_PLANKS), Ingredient.of(), new ItemStack(DMRegistry.WALLPAPER_ITEMS.apply(DMRegistry.DARK_OAK_TRIM.get()).get(), 8))
+                    .unlocks("has_planks", has(Items.DARK_OAK_PLANKS))
+                    .save(exporter, id("dark_oak_trim"));
+
+            WallpaperingRecipe.Builder.wallpapering(Ingredient.of(Items.JUNGLE_PLANKS), Ingredient.of(), new ItemStack(DMRegistry.WALLPAPER_ITEMS.apply(DMRegistry.JUNGLE_TRIM.get()).get(), 8))
+                    .unlocks("has_planks", has(Items.JUNGLE_PLANKS))
+                    .save(exporter, id("jungle_trim"));
+
+            WallpaperingRecipe.Builder.wallpapering(Ingredient.of(Items.MANGROVE_PLANKS), Ingredient.of(), new ItemStack(DMRegistry.WALLPAPER_ITEMS.apply(DMRegistry.MANGROVE_TRIM.get()).get(), 8))
+                    .unlocks("has_planks", has(Items.MANGROVE_PLANKS))
+                    .save(exporter, id("mangrove_trim"));
+
+            WallpaperingRecipe.Builder.wallpapering(Ingredient.of(Items.OAK_PLANKS), Ingredient.of(), new ItemStack(DMRegistry.WALLPAPER_ITEMS.apply(DMRegistry.OAK_TRIM.get()).get(), 8))
+                    .unlocks("has_planks", has(Items.OAK_PLANKS))
+                    .save(exporter, id("oak_trim"));
+
+            WallpaperingRecipe.Builder.wallpapering(Ingredient.of(Items.SPRUCE_PLANKS), Ingredient.of(), new ItemStack(DMRegistry.WALLPAPER_ITEMS.apply(DMRegistry.SPRUCE_TRIM.get()).get(), 8))
+                    .unlocks("has_planks", has(Items.SPRUCE_PLANKS))
+                    .save(exporter, id("spruce_trim"));
+
+            WallpaperingRecipe.Builder.wallpapering(Ingredient.of(Items.WARPED_PLANKS), Ingredient.of(), new ItemStack(DMRegistry.WALLPAPER_ITEMS.apply(DMRegistry.WARPED_TRIM.get()).get(), 8))
+                    .unlocks("has_planks", has(Items.WARPED_PLANKS))
+                    .save(exporter, id("warped_trim"));
+
+
+
         }
     }
 

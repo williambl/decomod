@@ -1,13 +1,14 @@
 package com.williambl.decomod.wallpaper;
 
 import com.google.gson.JsonObject;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.JsonOps;
 import com.williambl.decomod.DMRegistry;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
-import net.minecraft.core.Registry;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.network.FriendlyByteBuf;
@@ -18,7 +19,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
@@ -87,11 +87,20 @@ public class WallpaperingRecipe implements Recipe<Container> {
     }
 
     public static class Serializer implements RecipeSerializer<WallpaperingRecipe> {
+
+        private static Ingredient getPossiblyEmptyIngredient(JsonObject json, String key) {
+            var jsonElement = json.get(key);
+            if (jsonElement.isJsonArray() && jsonElement.getAsJsonArray().isEmpty()) {
+                return Ingredient.of();
+            }
+            return Ingredient.fromJson(jsonElement);
+        }
+
         @Override
         public WallpaperingRecipe fromJson(ResourceLocation id, JsonObject json) {
-            Ingredient ingredientA = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "ingredient_a"));
-            Ingredient ingredientB = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "ingredient_b"));
-            ItemStack result = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
+            Ingredient ingredientA = getPossiblyEmptyIngredient(json, "ingredient_a");
+            Ingredient ingredientB = getPossiblyEmptyIngredient(json, "ingredient_b");
+            ItemStack result = ItemStack.CODEC.decode(JsonOps.INSTANCE, GsonHelper.getAsJsonObject(json, "result")).map(Pair::getFirst).result().orElseThrow();
             return new WallpaperingRecipe(id, ingredientA, ingredientB, result);
         }
 
@@ -114,11 +123,11 @@ public class WallpaperingRecipe implements Recipe<Container> {
     public static class Builder {
         private final Ingredient ingredientA;
         private final Ingredient ingredientB;
-        private final Item result;
+        private final ItemStack result;
         private final Advancement.Builder advancement = Advancement.Builder.advancement();
         private final RecipeSerializer<?> type;
 
-        public Builder(RecipeSerializer<?> recipeSerializer, Ingredient ingredientA, Ingredient ingredient2, Item item) {
+        public Builder(RecipeSerializer<?> recipeSerializer, Ingredient ingredientA, Ingredient ingredient2, ItemStack item) {
             this.type = recipeSerializer;
             this.ingredientA = ingredientA;
             this.ingredientB = ingredient2;
@@ -126,6 +135,10 @@ public class WallpaperingRecipe implements Recipe<Container> {
         }
 
         public static Builder wallpapering(Ingredient ingredient, Ingredient ingredient2, Item item) {
+            return new Builder(DMRegistry.WALLPAPERING_RECIPE_SERIALIZER.get(), ingredient, ingredient2, item.getDefaultInstance());
+        }
+
+        public static Builder wallpapering(Ingredient ingredient, Ingredient ingredient2, ItemStack item) {
             return new Builder(DMRegistry.WALLPAPERING_RECIPE_SERIALIZER.get(), ingredient, ingredient2, item);
         }
 
@@ -142,7 +155,7 @@ public class WallpaperingRecipe implements Recipe<Container> {
             this.ensureValid(resourceLocation);
             this.advancement.parent(RecipeBuilder.ROOT_RECIPE_ADVANCEMENT).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(resourceLocation)).rewards(AdvancementRewards.Builder.recipe(resourceLocation)).requirements(RequirementsStrategy.OR);
             String namespace = resourceLocation.getNamespace();
-            String categoryName = this.result.getItemCategory() == null ? "uncategorised" : this.result.getItemCategory().getRecipeFolderName();
+            String categoryName = this.result.getItem().getItemCategory() == null ? "uncategorised" : this.result.getItem().getItemCategory().getRecipeFolderName();
             consumer.accept(new Builder.Result(resourceLocation, this.type, this.ingredientA, this.ingredientB, this.result, this.advancement, new ResourceLocation(namespace, "recipes/" + categoryName + "/" + resourceLocation.getPath())));
         }
 
@@ -156,12 +169,12 @@ public class WallpaperingRecipe implements Recipe<Container> {
             private final ResourceLocation id;
             private final Ingredient base;
             private final Ingredient addition;
-            private final Item result;
+            private final ItemStack result;
             private final Advancement.Builder advancement;
             private final ResourceLocation advancementId;
             private final RecipeSerializer<?> type;
 
-            public Result(ResourceLocation resourceLocation, RecipeSerializer<?> recipeSerializer, Ingredient ingredient, Ingredient ingredient2, Item item, Advancement.Builder builder, ResourceLocation resourceLocation2) {
+            public Result(ResourceLocation resourceLocation, RecipeSerializer<?> recipeSerializer, Ingredient ingredient, Ingredient ingredient2, ItemStack item, Advancement.Builder builder, ResourceLocation resourceLocation2) {
                 this.id = resourceLocation;
                 this.type = recipeSerializer;
                 this.base = ingredient;
@@ -175,9 +188,8 @@ public class WallpaperingRecipe implements Recipe<Container> {
             public void serializeRecipeData(JsonObject jsonObject) {
                 jsonObject.add("ingredient_a", this.base.toJson());
                 jsonObject.add("ingredient_b", this.addition.toJson());
-                JsonObject jsonObject2 = new JsonObject();
-                jsonObject2.addProperty("item", Registry.ITEM.getKey(this.result).toString());
-                jsonObject.add("result", jsonObject2);
+                var serialisedStack = ItemStack.CODEC.encodeStart(JsonOps.INSTANCE, this.result).result().orElseThrow();
+                jsonObject.add("result", serialisedStack);
             }
 
             @Override

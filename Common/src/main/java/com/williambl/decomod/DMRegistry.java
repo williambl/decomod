@@ -69,4 +69,24 @@ public class DMRegistry {
 
     public static final Supplier<WallpaperType> IRON_BAND =
             Services.REGISTRATION_HELPER.registerWallpaperType("iron_band", WallpaperType::new);
+
+    public static final Supplier<WallpaperType> ACACIA_TRIM =
+            Services.REGISTRATION_HELPER.registerWallpaperType("acacia_trim", WallpaperType::new);
+
+    public static final Supplier<WallpaperType> BIRCH_TRIM =
+            Services.REGISTRATION_HELPER.registerWallpaperType("birch_trim", WallpaperType::new);
+    public static final Supplier<WallpaperType> CRIMSON_TRIM =
+            Services.REGISTRATION_HELPER.registerWallpaperType("crimson_trim", WallpaperType::new);
+    public static final Supplier<WallpaperType> DARK_OAK_TRIM =
+            Services.REGISTRATION_HELPER.registerWallpaperType("dark_oak_trim", WallpaperType::new);
+    public static final Supplier<WallpaperType> JUNGLE_TRIM =
+            Services.REGISTRATION_HELPER.registerWallpaperType("jungle_trim", WallpaperType::new);
+    public static final Supplier<WallpaperType> MANGROVE_TRIM =
+            Services.REGISTRATION_HELPER.registerWallpaperType("mangrove_trim", WallpaperType::new);
+    public static final Supplier<WallpaperType> OAK_TRIM =
+            Services.REGISTRATION_HELPER.registerWallpaperType("oak_trim", WallpaperType::new);
+    public static final Supplier<WallpaperType> SPRUCE_TRIM =
+            Services.REGISTRATION_HELPER.registerWallpaperType("spruce_trim", WallpaperType::new);
+    public static final Supplier<WallpaperType> WARPED_TRIM =
+            Services.REGISTRATION_HELPER.registerWallpaperType("warped_trim", WallpaperType::new);
 }
