@@ -12,6 +12,7 @@ import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.ItemModelGenerators;
 import net.minecraft.data.models.blockstates.*;
 import net.minecraft.data.models.model.ModelTemplate;
+import net.minecraft.data.models.model.ModelTemplates;
 import net.minecraft.data.models.model.TextureMapping;
 import net.minecraft.data.models.model.TextureSlot;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -20,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 import java.util.Optional;
@@ -115,10 +117,23 @@ public class DMDatagen implements DataGeneratorEntrypoint {
             );
         }
 
+        private void createWallpaperingTable(BlockModelGenerators blockModelGenerators) {
+            TextureMapping textureMapping = new TextureMapping()
+                    .put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(DMRegistry.WALLPAPERING_TABLE_BLOCK.get(), "_side3"))
+                    .put(TextureSlot.DOWN, TextureMapping.getBlockTexture(Blocks.ACACIA_PLANKS))
+                    .put(TextureSlot.UP, TextureMapping.getBlockTexture(DMRegistry.WALLPAPERING_TABLE_BLOCK.get(), "_top"))
+                    .put(TextureSlot.NORTH, TextureMapping.getBlockTexture(DMRegistry.WALLPAPERING_TABLE_BLOCK.get(), "_side4"))
+                    .put(TextureSlot.EAST, TextureMapping.getBlockTexture(DMRegistry.WALLPAPERING_TABLE_BLOCK.get(), "_side3"))
+                    .put(TextureSlot.SOUTH, TextureMapping.getBlockTexture(DMRegistry.WALLPAPERING_TABLE_BLOCK.get(), "_side1"))
+                    .put(TextureSlot.WEST, TextureMapping.getBlockTexture(DMRegistry.WALLPAPERING_TABLE_BLOCK.get(), "_side2"));
+            blockModelGenerators.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(DMRegistry.WALLPAPERING_TABLE_BLOCK.get(), ModelTemplates.CUBE.create(DMRegistry.WALLPAPERING_TABLE_BLOCK.get(), textureMapping, blockModelGenerators.modelOutput)));
+        }
+
         @Override
         public void generateBlockStateModels(BlockModelGenerators blockStateModelGenerator) {
             createDoor(DMRegistry.CUSTOM_DOOR.getFirst().get(), blockStateModelGenerator);
             createIronFence(DMRegistry.IRON_FENCE.get(), blockStateModelGenerator);
+            createWallpaperingTable(blockStateModelGenerator);
         }
 
         @Override
