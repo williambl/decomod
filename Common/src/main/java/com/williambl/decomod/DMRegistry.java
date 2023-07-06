@@ -89,4 +89,24 @@ public class DMRegistry {
             Services.REGISTRATION_HELPER.registerWallpaperType("spruce_trim", WallpaperType::new);
     public static final Supplier<WallpaperType> WARPED_TRIM =
             Services.REGISTRATION_HELPER.registerWallpaperType("warped_trim", WallpaperType::new);
+    public static final Supplier<Pair<WallpaperType, WallpaperType>> BRICKS_QUOIN =
+            Services.REGISTRATION_HELPER.registerWallpaperTypeLeftAndRight("bricks_quoin", WallpaperType::new);
+
+    public static final Supplier<Pair<WallpaperType, WallpaperType>> DEEPSLATE_BRICKS_QUOIN =
+            Services.REGISTRATION_HELPER.registerWallpaperTypeLeftAndRight("deepslate_bricks_quoin", WallpaperType::new);
+
+    public static final Supplier<Pair<WallpaperType, WallpaperType>> END_STONE_BRICKS_QUOIN =
+            Services.REGISTRATION_HELPER.registerWallpaperTypeLeftAndRight("end_stone_bricks_quoin", WallpaperType::new);
+
+    public static final Supplier<Pair<WallpaperType, WallpaperType>> MUD_BRICKS_QUOIN =
+            Services.REGISTRATION_HELPER.registerWallpaperTypeLeftAndRight("mud_bricks_quoin", WallpaperType::new);
+
+    public static final Supplier<Pair<WallpaperType, WallpaperType>> POLISHED_BLACKSTONE_BRICKS_QUOIN =
+            Services.REGISTRATION_HELPER.registerWallpaperTypeLeftAndRight("polished_blackstone_bricks_quoin", WallpaperType::new);
+
+    public static final Supplier<Pair<WallpaperType, WallpaperType>> QUARTZ_BRICKS_QUOIN =
+            Services.REGISTRATION_HELPER.registerWallpaperTypeLeftAndRight("quartz_bricks_quoin", WallpaperType::new);
+
+    public static final Supplier<Pair<WallpaperType, WallpaperType>> STONE_BRICKS_QUOIN =
+            Services.REGISTRATION_HELPER.registerWallpaperTypeLeftAndRight("stone_bricks_quoin", WallpaperType::new);
 }

@@ -1,5 +1,6 @@
 package com.williambl.decomod.fabric.data;
 
+import com.mojang.datafixers.util.Pair;
 import com.williambl.decomod.DMRegistry;
 import com.williambl.decomod.wallpaper.WallpaperType;
 import com.williambl.decomod.wallpaper.WallpaperingRecipe;
@@ -181,6 +182,13 @@ public class DMDatagen implements DataGeneratorEntrypoint {
             exportTrim(Items.OAK_PLANKS, DMRegistry.OAK_TRIM.get(), "oak_trim", exporter);
             exportTrim(Items.SPRUCE_PLANKS, DMRegistry.SPRUCE_TRIM.get(), "spruce_trim", exporter);
             exportTrim(Items.WARPED_PLANKS, DMRegistry.WARPED_TRIM.get(), "warped_trim", exporter);
+            exportQuoins(Items.BRICKS, DMRegistry.BRICKS_QUOIN.get(), "bricks_quoin", exporter);
+            exportQuoins(Items.DEEPSLATE_BRICKS, DMRegistry.DEEPSLATE_BRICKS_QUOIN.get(), "deepslate_bricks_quoin", exporter);
+            exportQuoins(Items.END_STONE_BRICKS, DMRegistry.END_STONE_BRICKS_QUOIN.get(), "end_stone_bricks_quoin", exporter);
+            exportQuoins(Items.MUD_BRICKS, DMRegistry.MUD_BRICKS_QUOIN.get(), "mud_bricks_quoin", exporter);
+            exportQuoins(Items.POLISHED_BLACKSTONE_BRICKS, DMRegistry.POLISHED_BLACKSTONE_BRICKS_QUOIN.get(), "polished_blackstone_bricks_quoin", exporter);
+            exportQuoins(Items.QUARTZ_BRICKS, DMRegistry.QUARTZ_BRICKS_QUOIN.get(), "quartz_bricks_quoin", exporter);
+            exportQuoins(Items.STONE_BRICKS, DMRegistry.STONE_BRICKS_QUOIN.get(), "stone_bricks_quoin", exporter);
         }
 
         private static WallpaperingRecipe.Builder wallpaperFromItem(ItemLike itemLike, WallpaperType wallpaper, int count) {
@@ -191,6 +199,15 @@ public class DMDatagen implements DataGeneratorEntrypoint {
             wallpaperFromItem(planks, wallpaper, 8)
                     .unlocks("has_planks", has(planks))
                     .save(exporter, id(name));
+        }
+
+        private static void exportQuoins(ItemLike bricks, Pair<WallpaperType, WallpaperType> quoins, String name, Consumer<FinishedRecipe> exporter) {
+            wallpaperFromItem(bricks, quoins.getFirst(), 6)
+                    .unlocks("has_bricks", has(bricks))
+                    .save(exporter, id(name+"_left"));
+            wallpaperFromItem(bricks, quoins.getSecond(), 6)
+                    .unlocks("has_bricks", has(bricks))
+                    .save(exporter, id(name+"_right"));
         }
     }
 

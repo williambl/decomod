@@ -2,9 +2,7 @@ package com.williambl.decomod.platform.services;
 
 import com.mojang.datafixers.util.Pair;
 import com.williambl.decomod.wallpaper.WallpaperType;
-import com.williambl.decomod.wallpaper.WallpaperingTableMenu;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -51,5 +49,10 @@ public interface IRegistrationHelper {
     public <T> Supplier<Registry<T>> registerRegistry(String name, Class<T> clazz);
     public <T extends AbstractContainerMenu> Supplier<MenuType<T>> registerMenuType(String name, BiFunction<Integer, Inventory, T> factory);
     public <T extends WallpaperType> Supplier<T> registerWallpaperType(String name, Supplier<T> sup);
+    default <T extends WallpaperType> Supplier<Pair<T, T>> registerWallpaperTypeLeftAndRight(String name, Supplier<T> sup) {
+        var left = this.registerWallpaperType(name+"_left", sup);
+        var right = this.registerWallpaperType(name+"_right", sup);
+        return () -> Pair.of(left.get(), right.get());
+    }
     public <T> void forAllRegistered(Registry<T> registry, BiConsumer<T, ResourceLocation> consumer);
 }
