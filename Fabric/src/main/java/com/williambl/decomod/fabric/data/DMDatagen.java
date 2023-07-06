@@ -55,7 +55,7 @@ public class DMDatagen implements DataGeneratorEntrypoint {
         private static final TextureSlot PANEL_TEXTURE = TextureSlot.create("panel");
         private static final TextureSlot POST_TEXTURE = TextureSlot.create("post");
         private static final ModelTemplate FENCE_PANEL = createModelTemplate("fence_panel", "_panel", PANEL_TEXTURE);
-        private static final ModelTemplate FENCE_CORNER = createModelTemplate("fence_corner", "_corner", PANEL_TEXTURE);
+        private static final ModelTemplate FENCE_CORNER = createModelTemplate("fence_corner", "_corner", PANEL_TEXTURE, POST_TEXTURE);
         private static final ModelTemplate FENCE_END = createModelTemplate("fence_end", "_end", PANEL_TEXTURE, POST_TEXTURE);
         private static final ModelTemplate FENCE_POST = createModelTemplate("fence_post", "_post", POST_TEXTURE);
 
