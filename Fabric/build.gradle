@@ -9,7 +9,7 @@ archivesBaseName = "${mod_name}-fabric-${minecraft_version}"
 repositories {
     maven {
         name = 'Ladysnake Mods'
-        url = 'https://ladysnake.jfrog.io/artifactory/mods'
+        url = 'https://maven.ladysnake.org/releases'
     }
 }
 
@@ -18,9 +18,9 @@ dependencies {
     mappings loom.officialMojangMappings()
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
-    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:5.0.2"
-    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:5.0.2"
-    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-chunk:5.0.2"
+    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:5.2.1"
+    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:5.2.1"
+    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-chunk:5.2.1"
     modImplementation "net.devtech:arrp:0.6.5"
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     implementation project(":Common")
