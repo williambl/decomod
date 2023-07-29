@@ -11,6 +11,9 @@ repositories {
         name = 'Ladysnake Mods'
         url = 'https://maven.ladysnake.org/releases'
     }
+    maven {
+        url = 'https://ueaj.dev/maven'
+    }
 }
 
 dependencies {
@@ -21,7 +24,7 @@ dependencies {
     modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:5.2.1"
     modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:5.2.1"
     modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-chunk:5.2.1"
-    modImplementation "net.devtech:arrp:0.6.5"
+    modImplementation "net.devtech:arrp:0.6.7"
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     implementation project(":Common")
 }
