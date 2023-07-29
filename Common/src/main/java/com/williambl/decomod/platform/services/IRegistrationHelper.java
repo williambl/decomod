@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
 
 import java.util.Set;
 import java.util.function.*;
@@ -39,8 +40,8 @@ public interface IRegistrationHelper {
         var item = this.registerItem(name, () -> new DoubleHighBlockItem(block.get(), itemProps));
         return Pair.of(block, item);
     }
-    default Pair<Supplier<DoorBlock>, Supplier<DoubleHighBlockItem>> registerDoor(String name, BlockBehaviour.Properties blockProps, Item.Properties itemProps) {
-        return this.registerDoor(name, () -> new DoorBlock(blockProps) {}, itemProps);
+    default Pair<Supplier<DoorBlock>, Supplier<DoubleHighBlockItem>> registerDoor(String name, BlockSetType blockSetType, BlockBehaviour.Properties blockProps, Item.Properties itemProps) {
+        return this.registerDoor(name, () -> new DoorBlock(blockProps, blockSetType) {}, itemProps);
     }
     public <T extends BlockEntity> Supplier<BlockEntityType<T>> registerBEType(String name, BiFunction<BlockPos, BlockState, T> factory, Supplier<Set<Block>> blocksSup);
     public <T extends RecipeType<?>> Supplier<T> registerRecipeType(String name, Supplier<T> sup);

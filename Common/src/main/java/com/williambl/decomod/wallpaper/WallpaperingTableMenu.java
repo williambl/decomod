@@ -56,7 +56,7 @@ public class WallpaperingTableMenu extends AbstractContainerMenu {
     public WallpaperingTableMenu(int syncId, Inventory inventory, final ContainerLevelAccess levelAccess) {
         super(DMRegistry.WALLPAPERING_TABLE_MENU.get(), syncId);
         this.access = levelAccess;
-        this.level = inventory.player.level;
+        this.level = inventory.player.level();
         this.inputSlotA = this.addSlot(new Slot(this.container, INPUT_SLOT_A, 15, 15));
         this.inputSlotB = this.addSlot(new Slot(this.container, INPUT_SLOT_B, 15, 52));
         this.resultSlot = this.addSlot(new Slot(this.resultContainer, RESULT_SLOT, 143, 33) {
@@ -67,8 +67,8 @@ public class WallpaperingTableMenu extends AbstractContainerMenu {
 
             @Override
             public void onTake(Player player, ItemStack stack) {
-                stack.onCraftedBy(player.level, player, stack.getCount());
-                WallpaperingTableMenu.this.resultContainer.awardUsedRecipes(player);
+                stack.onCraftedBy(player.level(), player, stack.getCount());
+                WallpaperingTableMenu.this.resultContainer.awardUsedRecipes(player, List.of(stack));
                 ItemStack inputA = WallpaperingTableMenu.this.inputSlotA.remove(1);
                 ItemStack inputB = WallpaperingTableMenu.this.inputSlotB.remove(1);
                 if (!inputA.isEmpty() || !inputB.isEmpty()) {
@@ -167,7 +167,7 @@ public class WallpaperingTableMenu extends AbstractContainerMenu {
         if (!this.recipes.isEmpty() && this.isValidRecipeIndex(this.selectedRecipeIndex.get())) {
             WallpaperingRecipe recipe = this.recipes.get(this.selectedRecipeIndex.get());
             this.resultContainer.setRecipeUsed(recipe);
-            this.resultSlot.set(recipe.assemble(this.container));
+            this.resultSlot.set(recipe.assemble(this.container, this.level.registryAccess()));
         } else {
             this.resultSlot.set(ItemStack.EMPTY);
         }
@@ -198,7 +198,7 @@ public class WallpaperingTableMenu extends AbstractContainerMenu {
             Item itemInSlot = stackInSlot.getItem();
             stack = stackInSlot.copy();
             if (slotIndex == RESULT_SLOT) { // if result slot is being shiftclicked, try taking from it...
-                itemInSlot.onCraftedBy(stackInSlot, player.level, player);
+                itemInSlot.onCraftedBy(stackInSlot, player.level(), player);
                 if (!this.moveItemStackTo(stackInSlot, INV_SLOT_START, USE_ROW_SLOT_END, true)) { // and putting into inventory
                     return ItemStack.EMPTY;
                 }

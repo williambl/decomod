@@ -7,6 +7,7 @@ import java.util.List;
 import com.williambl.decomod.wallpaper.WallpaperingRecipe;
 import com.williambl.decomod.wallpaper.WallpaperingTableMenu;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -15,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemDisplayContext;
 
 import static com.williambl.decomod.DecoMod.id;
 
@@ -41,31 +43,28 @@ public class WallpaperingTableScreen extends AbstractContainerScreen<Wallpaperin
     }
 
     @Override
-    public void render(PoseStack stack, int $$1, int $$2, float $$3) {
-        super.render(stack, $$1, $$2, $$3);
-        this.renderTooltip(stack, $$1, $$2);
+    public void render(GuiGraphics graphics, int $$1, int $$2, float $$3) {
+        super.render(graphics, $$1, $$2, $$3);
+        this.renderTooltip(graphics, $$1, $$2);
     }
 
     @Override
-    protected void renderBg(PoseStack stack, float $$1, int $$2, int $$3) {
-        this.renderBackground(stack);
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, BG_LOCATION);
+    protected void renderBg(GuiGraphics graphics, float $$1, int $$2, int $$3) {
+        this.renderBackground(graphics);
         int $$4 = this.leftPos;
         int $$5 = this.topPos;
-        this.blit(stack, $$4, $$5, 0, 0, this.imageWidth, this.imageHeight);
+        graphics.blit(BG_LOCATION, $$4, $$5, 0, 0, this.imageWidth, this.imageHeight);
         int $$6 = (int)(41.0F * this.scrollOffs);
-        this.blit(stack, $$4 + 119, $$5 + SCROLLER_HEIGHT + $$6, 176 + (this.isScrollBarActive() ? 0 : SCROLLER_WIDTH), 0, SCROLLER_WIDTH, SCROLLER_HEIGHT);
+        graphics.blit(BG_LOCATION, $$4 + 119, $$5 + SCROLLER_HEIGHT + $$6, 176 + (this.isScrollBarActive() ? 0 : SCROLLER_WIDTH), 0, SCROLLER_WIDTH, SCROLLER_HEIGHT);
         int $$7 = this.leftPos + RECIPES_X;
         int $$8 = this.topPos + RECIPES_Y;
         int $$9 = this.startIndex + SCROLLER_WIDTH;
-        this.renderButtons(stack, $$2, $$3, $$7, $$8, $$9);
-        this.renderRecipes($$7, $$8, $$9);
+        this.renderButtons(graphics, $$2, $$3, $$7, $$8, $$9);
+        this.renderRecipes(graphics, $$7, $$8, $$9);
     }
 
     @Override
-    protected void renderTooltip(PoseStack $$0, int $$1, int $$2) {
+    protected void renderTooltip(GuiGraphics $$0, int $$1, int $$2) {
         super.renderTooltip($$0, $$1, $$2);
         if (this.displayRecipes) {
             int $$3 = this.leftPos + RECIPES_X;
@@ -78,14 +77,14 @@ public class WallpaperingTableScreen extends AbstractContainerScreen<Wallpaperin
                 int $$9 = $$3 + $$8 % RECIPES_COLUMNS * RECIPES_IMAGE_SIZE_WIDTH;
                 int $$10 = $$4 + $$8 / RECIPES_COLUMNS * RECIPES_IMAGE_SIZE_HEIGHT + 2;
                 if ($$1 >= $$9 && $$1 < $$9 + RECIPES_IMAGE_SIZE_WIDTH && $$2 >= $$10 && $$2 < $$10 + RECIPES_IMAGE_SIZE_HEIGHT) {
-                    this.renderTooltip($$0, $$6.get($$7).getResultItem(), $$1, $$2);
+                    $$0.renderTooltip(this.font, $$6.get($$7).getResultItem(this.minecraft.level.registryAccess()), $$1, $$2);
                 }
             }
         }
 
     }
 
-    private void renderButtons(PoseStack $$0, int $$1, int $$2, int $$3, int $$4, int $$5) {
+    private void renderButtons(GuiGraphics $$0, int $$1, int $$2, int $$3, int $$4, int $$5) {
         for(int $$6 = this.startIndex; $$6 < $$5 && $$6 < this.menu.getNumRecipes(); ++$$6) {
             int $$7 = $$6 - this.startIndex;
             int $$8 = $$3 + $$7 % RECIPES_COLUMNS * RECIPES_IMAGE_SIZE_WIDTH;
@@ -98,12 +97,12 @@ public class WallpaperingTableScreen extends AbstractContainerScreen<Wallpaperin
                 $$11 += 36;
             }
 
-            this.blit($$0, $$8, $$10 - 1, 0, $$11, RECIPES_IMAGE_SIZE_WIDTH, RECIPES_IMAGE_SIZE_HEIGHT);
+            $$0.blit(BG_LOCATION, $$8, $$10 - 1, 0, $$11, RECIPES_IMAGE_SIZE_WIDTH, RECIPES_IMAGE_SIZE_HEIGHT);
         }
 
     }
 
-    private void renderRecipes(int $$0, int $$1, int $$2) {
+    private void renderRecipes(GuiGraphics graphics, int $$0, int $$1, int $$2) {
         List<WallpaperingRecipe> $$3 = this.menu.getRecipes();
 
         for(int $$4 = this.startIndex; $$4 < $$2 && $$4 < this.menu.getNumRecipes(); ++$$4) {
@@ -111,7 +110,7 @@ public class WallpaperingTableScreen extends AbstractContainerScreen<Wallpaperin
             int $$6 = $$0 + $$5 % RECIPES_COLUMNS * RECIPES_IMAGE_SIZE_WIDTH;
             int $$7 = $$5 / RECIPES_COLUMNS;
             int $$8 = $$1 + $$7 * RECIPES_IMAGE_SIZE_HEIGHT + 2;
-            this.minecraft.getItemRenderer().renderAndDecorateItem($$3.get($$4).getResultItem(), $$6, $$8);
+            graphics.renderItem($$3.get($$4).getResultItem(this.minecraft.level.registryAccess()), $$6, $$8);
         }
 
     }

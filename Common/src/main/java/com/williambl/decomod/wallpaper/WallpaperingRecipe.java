@@ -9,6 +9,7 @@ import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.network.FriendlyByteBuf;
@@ -43,7 +44,7 @@ public class WallpaperingRecipe implements Recipe<Container> {
     }
 
     @Override
-    public ItemStack assemble(Container container) {
+    public ItemStack assemble(Container container, RegistryAccess registries) {
         return this.result.copy();
     }
 
@@ -53,7 +54,7 @@ public class WallpaperingRecipe implements Recipe<Container> {
     }
 
     @Override
-    public ItemStack getResultItem() {
+    public ItemStack getResultItem(RegistryAccess registries) {
         return this.result;
     }
 
@@ -155,8 +156,7 @@ public class WallpaperingRecipe implements Recipe<Container> {
             this.ensureValid(resourceLocation);
             this.advancement.parent(RecipeBuilder.ROOT_RECIPE_ADVANCEMENT).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(resourceLocation)).rewards(AdvancementRewards.Builder.recipe(resourceLocation)).requirements(RequirementsStrategy.OR);
             String namespace = resourceLocation.getNamespace();
-            String categoryName = this.result.getItem().getItemCategory() == null ? "uncategorised" : this.result.getItem().getItemCategory().getRecipeFolderName();
-            consumer.accept(new Builder.Result(resourceLocation, this.type, this.ingredientA, this.ingredientB, this.result, this.advancement, new ResourceLocation(namespace, "recipes/" + categoryName + "/" + resourceLocation.getPath())));
+            consumer.accept(new Builder.Result(resourceLocation, this.type, this.ingredientA, this.ingredientB, this.result, this.advancement, new ResourceLocation(namespace, "recipes/" + resourceLocation.getPath())));
         }
 
         private void ensureValid(ResourceLocation resourceLocation) {

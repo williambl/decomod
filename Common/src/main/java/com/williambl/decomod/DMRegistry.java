@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.IronBarsBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -27,7 +28,7 @@ import static com.williambl.decomod.DecoMod.id;
 
 public class DMRegistry {
     public static final Pair<Supplier<DoorBlock>, Supplier<DoubleHighBlockItem>> CUSTOM_DOOR =
-            Services.REGISTRATION_HELPER.registerDoor("custom_door", BlockBehaviour.Properties.copy(Blocks.ACACIA_DOOR), new Item.Properties());
+            Services.REGISTRATION_HELPER.registerDoor("custom_door", BlockSetType.ACACIA, BlockBehaviour.Properties.copy(Blocks.ACACIA_DOOR), new Item.Properties());
     public static final Supplier<IronBarsBlock> IRON_FENCE =
             Services.REGISTRATION_HELPER.registerBlock("iron_fence", () -> new IronBarsBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BARS)) {}, new Item.Properties());
 

@@ -6,8 +6,10 @@ import com.williambl.decomod.wallpaper.WallpaperType;
 import com.williambl.decomod.wallpaper.WallpaperingRecipe;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.*;
 import net.minecraft.advancements.Advancement;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.ItemModelGenerators;
 import net.minecraft.data.models.blockstates.*;
@@ -26,6 +28,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 import static com.williambl.decomod.DecoMod.id;
@@ -33,13 +36,14 @@ import static com.williambl.decomod.DecoMod.id;
 public class DMDatagen implements DataGeneratorEntrypoint {
     @Override
     public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
-        fabricDataGenerator.addProvider(DMModels::new);
-        fabricDataGenerator.addProvider(DMBlockTags::new);
-        fabricDataGenerator.addProvider(DMItemTags::new);
-        fabricDataGenerator.addProvider(DMRecipes::new);
-        fabricDataGenerator.addProvider(DMLang::new);
-        fabricDataGenerator.addProvider(DMLootTables::new);
-        fabricDataGenerator.addProvider(DMAdvancements::new);
+        var pack = fabricDataGenerator.createPack();
+        pack.addProvider(DMModels::new);
+        pack.addProvider(DMBlockTags::new);
+        pack.addProvider(DMItemTags::new);
+        pack.addProvider(DMRecipes::new);
+        pack.addProvider(DMLang::new);
+        pack.addProvider(DMLootTables::new);
+        pack.addProvider(DMAdvancements::new);
     }
 
     private static class DMModels extends FabricModelProvider {
@@ -60,7 +64,7 @@ public class DMDatagen implements DataGeneratorEntrypoint {
         private static final ModelTemplate FENCE_POST = createModelTemplate("fence_post", "_post", POST_TEXTURE);
 
 
-        public DMModels(FabricDataGenerator dataGenerator) {
+        public DMModels(FabricDataOutput dataGenerator) {
             super(dataGenerator);
         }
 
@@ -143,32 +147,33 @@ public class DMDatagen implements DataGeneratorEntrypoint {
     }
 
     private static class DMBlockTags extends FabricTagProvider.BlockTagProvider {
-        public DMBlockTags(FabricDataGenerator dataGenerator) {
-            super(dataGenerator);
+        public DMBlockTags(FabricDataOutput dataGenerator, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+            super(dataGenerator, registriesFuture);
         }
 
         @Override
-        protected void generateTags() {
+        protected void addTags(HolderLookup.Provider arg) {
         }
     }
 
     private static class DMItemTags extends FabricTagProvider.ItemTagProvider {
-        public DMItemTags(FabricDataGenerator dataGenerator) {
-            super(dataGenerator);
+        public DMItemTags(FabricDataOutput dataGenerator, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+            super(dataGenerator, registriesFuture);
         }
 
         @Override
-        protected void generateTags() {
+        protected void addTags(HolderLookup.Provider arg) {
+
         }
     }
 
     private static class DMRecipes extends FabricRecipeProvider {
-        public DMRecipes(FabricDataGenerator dataGenerator) {
+        public DMRecipes(FabricDataOutput dataGenerator) {
             super(dataGenerator);
         }
 
         @Override
-        protected void generateRecipes(Consumer<FinishedRecipe> exporter) {
+        public void buildRecipes(Consumer<FinishedRecipe> exporter) {
             WallpaperingRecipe.Builder.wallpapering(Ingredient.of(Items.IRON_INGOT), Ingredient.of(Items.IRON_INGOT), DMRegistry.WALLPAPER_ITEMS.apply(DMRegistry.IRON_BAND.get()).get())
                     .unlocks("has_iron", has(Items.IRON_INGOT))
                     .save(exporter, id("iron_band"));
@@ -212,17 +217,17 @@ public class DMDatagen implements DataGeneratorEntrypoint {
     }
 
     private static class DMLootTables extends FabricBlockLootTableProvider {
-        protected DMLootTables(FabricDataGenerator dataGenerator) {
+        protected DMLootTables(FabricDataOutput dataGenerator) {
             super(dataGenerator);
         }
 
         @Override
-        protected void generateBlockLootTables() {
+        public void generate() {
         }
     }
 
     private static class DMLang extends FabricLanguageProvider {
-        protected DMLang(FabricDataGenerator dataGenerator) {
+        protected DMLang(FabricDataOutput dataGenerator) {
             super(dataGenerator);
         }
 
@@ -232,7 +237,7 @@ public class DMDatagen implements DataGeneratorEntrypoint {
     }
 
     private static class DMAdvancements extends FabricAdvancementProvider {
-        protected DMAdvancements(FabricDataGenerator dataGenerator) {
+        protected DMAdvancements(FabricDataOutput dataGenerator) {
             super(dataGenerator);
         }
 

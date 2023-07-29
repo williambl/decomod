@@ -5,7 +5,7 @@ import com.williambl.decomod.client.WallpaperRenderer;
 import com.williambl.decomod.fabric.DecoModRuntimeResourcePack;
 import com.williambl.decomod.platform.services.client.IClientHelper;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
+import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
@@ -81,8 +81,8 @@ public class FabricClientHelper implements IClientHelper {
 
     @Override
     public void forceLoadModels(Consumer<Consumer<ResourceLocation>> modelConsumer) {
-        ModelLoadingRegistry.INSTANCE.registerModelProvider((manager, out) -> {
-            modelConsumer.accept(out);
+        ModelLoadingPlugin.register(pluginContext -> {
+            modelConsumer.accept(pluginContext::addModels);
         });
     }
 }
