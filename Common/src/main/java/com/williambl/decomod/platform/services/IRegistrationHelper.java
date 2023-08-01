@@ -1,6 +1,7 @@
 package com.williambl.decomod.platform.services;
 
 import com.mojang.datafixers.util.Pair;
+import com.williambl.decomod.wallpaper.DoubleWallpaperType;
 import com.williambl.decomod.wallpaper.WallpaperType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
@@ -24,6 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.*;
 
 public interface IRegistrationHelper {
@@ -50,10 +52,14 @@ public interface IRegistrationHelper {
     public <T> Supplier<Registry<T>> registerRegistry(String name, Class<T> clazz);
     public <T extends AbstractContainerMenu> Supplier<MenuType<T>> registerMenuType(String name, BiFunction<Integer, Inventory, T> factory);
     public <T extends WallpaperType> Supplier<T> registerWallpaperType(String name, Supplier<T> sup);
-    default <T extends WallpaperType> Supplier<Pair<T, T>> registerWallpaperTypeLeftAndRight(String name, Supplier<T> sup) {
-        var left = this.registerWallpaperType(name+"_left", sup);
-        var right = this.registerWallpaperType(name+"_right", sup);
-        return () -> Pair.of(left.get(), right.get());
+    default Supplier<Pair<WallpaperType, WallpaperType>> registerWallpaperTypeLeftAndRight(String name) {
+        AtomicReference<Supplier<DoubleWallpaperType>> leftRef = new AtomicReference<>();
+        AtomicReference<Supplier<DoubleWallpaperType>> rightRef = new AtomicReference<>();
+        Supplier<WallpaperType> leftSup = () -> leftRef.get().get();
+        Supplier<WallpaperType> rightSup = () -> rightRef.get().get();
+        leftRef.set(this.registerWallpaperType(name+"_left", () -> DoubleWallpaperType.createLeft(rightSup)));
+        rightRef.set(this.registerWallpaperType(name+"_right", () -> DoubleWallpaperType.createRight(leftSup)));
+        return () -> Pair.of(leftSup.get(), rightSup.get());
     }
     public <T> void forAllRegistered(Registry<T> registry, BiConsumer<T, ResourceLocation> consumer);
 }

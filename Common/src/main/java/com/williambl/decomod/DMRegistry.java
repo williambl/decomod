@@ -1,6 +1,5 @@
 package com.williambl.decomod;
 
-import com.mojang.datafixers.types.Func;
 import com.mojang.datafixers.util.Pair;
 import com.williambl.decomod.platform.Services;
 import com.williambl.decomod.wallpaper.*;
@@ -9,7 +8,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.DoubleHighBlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Blocks;
@@ -18,7 +16,6 @@ import net.minecraft.world.level.block.IronBarsBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -91,23 +88,23 @@ public class DMRegistry {
     public static final Supplier<WallpaperType> WARPED_TRIM =
             Services.REGISTRATION_HELPER.registerWallpaperType("warped_trim", WallpaperType::new);
     public static final Supplier<Pair<WallpaperType, WallpaperType>> BRICKS_QUOIN =
-            Services.REGISTRATION_HELPER.registerWallpaperTypeLeftAndRight("bricks_quoin", WallpaperType::new);
+            Services.REGISTRATION_HELPER.registerWallpaperTypeLeftAndRight("bricks_quoin");
 
     public static final Supplier<Pair<WallpaperType, WallpaperType>> DEEPSLATE_BRICKS_QUOIN =
-            Services.REGISTRATION_HELPER.registerWallpaperTypeLeftAndRight("deepslate_bricks_quoin", WallpaperType::new);
+            Services.REGISTRATION_HELPER.registerWallpaperTypeLeftAndRight("deepslate_bricks_quoin");
 
     public static final Supplier<Pair<WallpaperType, WallpaperType>> END_STONE_BRICKS_QUOIN =
-            Services.REGISTRATION_HELPER.registerWallpaperTypeLeftAndRight("end_stone_bricks_quoin", WallpaperType::new);
+            Services.REGISTRATION_HELPER.registerWallpaperTypeLeftAndRight("end_stone_bricks_quoin");
 
     public static final Supplier<Pair<WallpaperType, WallpaperType>> MUD_BRICKS_QUOIN =
-            Services.REGISTRATION_HELPER.registerWallpaperTypeLeftAndRight("mud_bricks_quoin", WallpaperType::new);
+            Services.REGISTRATION_HELPER.registerWallpaperTypeLeftAndRight("mud_bricks_quoin");
 
     public static final Supplier<Pair<WallpaperType, WallpaperType>> POLISHED_BLACKSTONE_BRICKS_QUOIN =
-            Services.REGISTRATION_HELPER.registerWallpaperTypeLeftAndRight("polished_blackstone_bricks_quoin", WallpaperType::new);
+            Services.REGISTRATION_HELPER.registerWallpaperTypeLeftAndRight("polished_blackstone_bricks_quoin");
 
     public static final Supplier<Pair<WallpaperType, WallpaperType>> QUARTZ_BRICKS_QUOIN =
-            Services.REGISTRATION_HELPER.registerWallpaperTypeLeftAndRight("quartz_bricks_quoin", WallpaperType::new);
+            Services.REGISTRATION_HELPER.registerWallpaperTypeLeftAndRight("quartz_bricks_quoin");
 
     public static final Supplier<Pair<WallpaperType, WallpaperType>> STONE_BRICKS_QUOIN =
-            Services.REGISTRATION_HELPER.registerWallpaperTypeLeftAndRight("stone_bricks_quoin", WallpaperType::new);
+            Services.REGISTRATION_HELPER.registerWallpaperTypeLeftAndRight("stone_bricks_quoin");
 }

@@ -6,6 +6,7 @@ import net.minecraft.Util;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.context.UseOnContext;
 
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -32,5 +33,9 @@ public class WallpaperType {
 
 	public int getTint() {
 		return 0;
+	}
+
+	public WallpaperType getVariant(UseOnContext ctx) {
+		return this;
 	}
 }
