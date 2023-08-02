@@ -4,10 +4,13 @@ import com.mojang.datafixers.util.Pair;
 import com.williambl.decomod.DMRegistry;
 import com.williambl.decomod.wallpaper.WallpaperType;
 import com.williambl.decomod.wallpaper.WallpaperingRecipe;
+import com.williambl.decomod.wallpaper.WallpaperingTableBlock;
+import com.williambl.decomod.wallpaper.WallpaperingTableMenu;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.*;
+import net.minecraft.Util;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.models.BlockModelGenerators;
@@ -232,7 +235,40 @@ public class DMDatagen implements DataGeneratorEntrypoint {
         }
 
         @Override
-        public void generateTranslations(TranslationBuilder translationBuilder) {
+        public void generateTranslations(TranslationBuilder builder) {
+            builder.add(DMRegistry.CUSTOM_DOOR.getFirst().get(), "Custom Door");
+            builder.add(DMRegistry.IRON_FENCE.get(), "Iron Fence");
+            builder.add(DMRegistry.WALLPAPER_SCRAPER.get(), "Wallpaper Scraper");
+            builder.add(DMRegistry.WALLPAPERING_TABLE_BLOCK.get(), "Wallpapering Table");
+            builder.add(WallpaperingTableBlock.CONTAINER_TITLE_KEY, "Wallpapering Table");
+            add(builder, DMRegistry.TEST_WALLPAPER.get(), "Test Wallpaper");
+            add(builder, DMRegistry.IRON_BAND.get(), "Iron Band");
+            add(builder, DMRegistry.ACACIA_TRIM.get(), "Acacia Trim");
+            add(builder, DMRegistry.BIRCH_TRIM.get(), "Birch Trim");
+            add(builder, DMRegistry.CRIMSON_TRIM.get(), "Crimson Trim");
+            add(builder, DMRegistry.DARK_OAK_TRIM.get(), "Dark Oak Trim");
+            add(builder, DMRegistry.JUNGLE_TRIM.get(), "Jungle Trim");
+            add(builder, DMRegistry.MANGROVE_TRIM.get(), "Mangrove Trim");
+            add(builder, DMRegistry.OAK_TRIM.get(), "Oak Trim");
+            add(builder, DMRegistry.SPRUCE_TRIM.get(), "Spruce Trim");
+            add(builder, DMRegistry.WARPED_TRIM.get(), "Warped Trim");
+            add(builder, DMRegistry.BRICKS_QUOIN.get(), "Bricks Quoin");
+            add(builder, DMRegistry.DEEPSLATE_BRICKS_QUOIN.get(), "Deepslate Bricks Quoin");
+            add(builder, DMRegistry.END_STONE_BRICKS_QUOIN.get(), "End Stone Bricks Quoin");
+            add(builder, DMRegistry.MUD_BRICKS_QUOIN.get(), "Mud Bricks Quoin");
+            add(builder, DMRegistry.POLISHED_BLACKSTONE_BRICKS_QUOIN.get(), "Polished Blackstone Bricks Quoin");
+            add(builder, DMRegistry.QUARTZ_BRICKS_QUOIN.get(), "Quartz Bricks Quoin");
+            add(builder, DMRegistry.STONE_BRICKS_QUOIN.get(), "Stone Bricks Quoin");
+        }
+
+        private void add(TranslationBuilder builder, WallpaperType wallpaper, String name) {
+            builder.add(Util.makeDescriptionId("wallpaper", DMRegistry.WALLPAPER_REGISTRY.get().getKey(wallpaper)), name);
+        }
+
+
+        private void add(TranslationBuilder builder, Pair<WallpaperType, WallpaperType> wallpapers, String name) {
+            builder.add(Util.makeDescriptionId("wallpaper", DMRegistry.WALLPAPER_REGISTRY.get().getKey(wallpapers.getFirst())), name);
+            builder.add(Util.makeDescriptionId("wallpaper", DMRegistry.WALLPAPER_REGISTRY.get().getKey(wallpapers.getSecond())), name);
         }
     }
 

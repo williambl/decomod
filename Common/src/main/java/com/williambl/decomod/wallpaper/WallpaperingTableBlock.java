@@ -27,7 +27,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nullable;
 
 public class WallpaperingTableBlock extends Block {
-    public static final Component CONTAINER_TITLE = Component.translatable("decomod.container.wallpapering_table");
+    public static final String CONTAINER_TITLE_KEY = "decomod.container.wallpapering_table";
+    public static final Component CONTAINER_TITLE = Component.translatable(CONTAINER_TITLE_KEY);
 
     public WallpaperingTableBlock(BlockBehaviour.Properties properties) {
         super(properties);
