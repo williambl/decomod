@@ -27,7 +27,7 @@ public class DMRegistry {
     public static final Pair<Supplier<DoorBlock>, Supplier<DoubleHighBlockItem>> CUSTOM_DOOR =
             Services.REGISTRATION_HELPER.registerDoor("custom_door", BlockSetType.ACACIA, BlockBehaviour.Properties.copy(Blocks.ACACIA_DOOR), new Item.Properties());
     public static final Supplier<IronBarsBlock> IRON_FENCE =
-            Services.REGISTRATION_HELPER.registerBlock("iron_fence", () -> new IronBarsBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BARS)) {}, new Item.Properties());
+            Services.REGISTRATION_HELPER.registerBlock("iron_fence", () -> new IronFenceBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BARS)) {}, new Item.Properties());
 
     public static final Supplier<Registry<WallpaperType>> WALLPAPER_REGISTRY =
             Services.REGISTRATION_HELPER.registerRegistry("wallpaper_type", WallpaperType.class);
