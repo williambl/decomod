@@ -24,8 +24,26 @@ import java.util.function.Supplier;
 import static com.williambl.decomod.DecoMod.id;
 
 public class DMRegistry {
-    public static final Pair<Supplier<DoorBlock>, Supplier<DoubleHighBlockItem>> CUSTOM_DOOR =
-            Services.REGISTRATION_HELPER.registerDoor("custom_door", BlockSetType.ACACIA, BlockBehaviour.Properties.copy(Blocks.ACACIA_DOOR), new Item.Properties());
+    public static final Pair<Supplier<DoorBlock>, Supplier<DoubleHighBlockItem>> ACACIA_DOOR =
+            Services.REGISTRATION_HELPER.registerDoor("acacia_door", BlockSetType.ACACIA, BlockBehaviour.Properties.copy(Blocks.ACACIA_DOOR), new Item.Properties());
+    public static final Pair<Supplier<DoorBlock>, Supplier<DoubleHighBlockItem>> BIRCH_DOOR =
+            Services.REGISTRATION_HELPER.registerDoor("birch_door", BlockSetType.BIRCH, BlockBehaviour.Properties.copy(Blocks.BIRCH_DOOR), new Item.Properties());
+    public static final Pair<Supplier<DoorBlock>, Supplier<DoubleHighBlockItem>> CRIMSON_DOOR =
+            Services.REGISTRATION_HELPER.registerDoor("crimson_door", BlockSetType.CRIMSON, BlockBehaviour.Properties.copy(Blocks.CRIMSON_DOOR), new Item.Properties());
+    public static final Pair<Supplier<DoorBlock>, Supplier<DoubleHighBlockItem>> DARK_OAK_DOOR =
+            Services.REGISTRATION_HELPER.registerDoor("dark_oak_door", BlockSetType.DARK_OAK, BlockBehaviour.Properties.copy(Blocks.DARK_OAK_DOOR), new Item.Properties());
+    public static final Pair<Supplier<DoorBlock>, Supplier<DoubleHighBlockItem>> JUNGLE_DOOR =
+            Services.REGISTRATION_HELPER.registerDoor("jungle_door", BlockSetType.JUNGLE, BlockBehaviour.Properties.copy(Blocks.JUNGLE_DOOR), new Item.Properties());
+    public static final Pair<Supplier<DoorBlock>, Supplier<DoubleHighBlockItem>> MANGROVE_DOOR =
+            Services.REGISTRATION_HELPER.registerDoor("mangrove_door", BlockSetType.MANGROVE, BlockBehaviour.Properties.copy(Blocks.MANGROVE_DOOR), new Item.Properties());
+    public static final Pair<Supplier<DoorBlock>, Supplier<DoubleHighBlockItem>> OAK_DOOR =
+            Services.REGISTRATION_HELPER.registerDoor("oak_door", BlockSetType.OAK, BlockBehaviour.Properties.copy(Blocks.OAK_DOOR), new Item.Properties());
+    public static final Pair<Supplier<DoorBlock>, Supplier<DoubleHighBlockItem>> SPRUCE_DOOR =
+            Services.REGISTRATION_HELPER.registerDoor("spruce_door", BlockSetType.SPRUCE, BlockBehaviour.Properties.copy(Blocks.SPRUCE_DOOR), new Item.Properties());
+    public static final Pair<Supplier<DoorBlock>, Supplier<DoubleHighBlockItem>> WARPED_DOOR =
+            Services.REGISTRATION_HELPER.registerDoor("warped_door", BlockSetType.WARPED, BlockBehaviour.Properties.copy(Blocks.WARPED_DOOR), new Item.Properties());
+    public static final Pair<Supplier<DoorBlock>, Supplier<DoubleHighBlockItem>> IRON_DOOR =
+            Services.REGISTRATION_HELPER.registerDoor("iron_door", BlockSetType.IRON, BlockBehaviour.Properties.copy(Blocks.IRON_DOOR), new Item.Properties());
     public static final Supplier<IronBarsBlock> IRON_FENCE =
             Services.REGISTRATION_HELPER.registerBlock("iron_fence", () -> new IronFenceBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BARS)) {}, new Item.Properties());
 

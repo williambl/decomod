@@ -139,7 +139,16 @@ public class DMDatagen implements DataGeneratorEntrypoint {
 
         @Override
         public void generateBlockStateModels(BlockModelGenerators blockStateModelGenerator) {
-            createDoor(DMRegistry.CUSTOM_DOOR.getFirst().get(), blockStateModelGenerator);
+            createDoor(DMRegistry.ACACIA_DOOR.getFirst().get(), blockStateModelGenerator);
+            createDoor(DMRegistry.BIRCH_DOOR.getFirst().get(), blockStateModelGenerator);
+            createDoor(DMRegistry.CRIMSON_DOOR.getFirst().get(), blockStateModelGenerator);
+            createDoor(DMRegistry.DARK_OAK_DOOR.getFirst().get(), blockStateModelGenerator);
+            createDoor(DMRegistry.JUNGLE_DOOR.getFirst().get(), blockStateModelGenerator);
+            createDoor(DMRegistry.MANGROVE_DOOR.getFirst().get(), blockStateModelGenerator);
+            createDoor(DMRegistry.OAK_DOOR.getFirst().get(), blockStateModelGenerator);
+            createDoor(DMRegistry.SPRUCE_DOOR.getFirst().get(), blockStateModelGenerator);
+            createDoor(DMRegistry.WARPED_DOOR.getFirst().get(), blockStateModelGenerator);
+            createDoor(DMRegistry.IRON_DOOR.getFirst().get(), blockStateModelGenerator);
             createIronFence(DMRegistry.IRON_FENCE.get(), blockStateModelGenerator);
             createWallpaperingTable(blockStateModelGenerator);
         }
@@ -236,7 +245,16 @@ public class DMDatagen implements DataGeneratorEntrypoint {
 
         @Override
         public void generateTranslations(TranslationBuilder builder) {
-            builder.add(DMRegistry.CUSTOM_DOOR.getFirst().get(), "Custom Door");
+            builder.add(DMRegistry.ACACIA_DOOR.getFirst().get(), "Acacia Door");
+            builder.add(DMRegistry.BIRCH_DOOR.getFirst().get(), "Birch Door");
+            builder.add(DMRegistry.CRIMSON_DOOR.getFirst().get(), "Crimson Door");
+            builder.add(DMRegistry.DARK_OAK_DOOR.getFirst().get(), "Dark Oak Door");
+            builder.add(DMRegistry.JUNGLE_DOOR.getFirst().get(), "Jungle Door");
+            builder.add(DMRegistry.MANGROVE_DOOR.getFirst().get(), "Mangrove Door");
+            builder.add(DMRegistry.OAK_DOOR.getFirst().get(), "Oak Door");
+            builder.add(DMRegistry.SPRUCE_DOOR.getFirst().get(), "Spruce Door");
+            builder.add(DMRegistry.WARPED_DOOR.getFirst().get(), "Warped Door");
+            builder.add(DMRegistry.IRON_DOOR.getFirst().get(), "Iron Door");
             builder.add(DMRegistry.IRON_FENCE.get(), "Iron Fence");
             builder.add(DMRegistry.WALLPAPER_SCRAPER.get(), "Wallpaper Scraper");
             builder.add(DMRegistry.WALLPAPERING_TABLE_BLOCK.get(), "Wallpapering Table");

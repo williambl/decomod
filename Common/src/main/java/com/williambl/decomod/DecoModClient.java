@@ -18,7 +18,16 @@ import static com.williambl.decomod.DecoMod.id;
 
 public class DecoModClient {
     public static void init() {
-        ClientServices.CLIENT.registerBlockRenderType(DMRegistry.CUSTOM_DOOR.getFirst().get(), RenderType.cutoutMipped());
+        ClientServices.CLIENT.registerBlockRenderType(DMRegistry.ACACIA_DOOR.getFirst().get(), RenderType.cutoutMipped());
+        ClientServices.CLIENT.registerBlockRenderType(DMRegistry.BIRCH_DOOR.getFirst().get(), RenderType.cutoutMipped());
+        ClientServices.CLIENT.registerBlockRenderType(DMRegistry.CRIMSON_DOOR.getFirst().get(), RenderType.cutoutMipped());
+        ClientServices.CLIENT.registerBlockRenderType(DMRegistry.DARK_OAK_DOOR.getFirst().get(), RenderType.cutoutMipped());
+        ClientServices.CLIENT.registerBlockRenderType(DMRegistry.JUNGLE_DOOR.getFirst().get(), RenderType.cutoutMipped());
+        ClientServices.CLIENT.registerBlockRenderType(DMRegistry.MANGROVE_DOOR.getFirst().get(), RenderType.cutoutMipped());
+        ClientServices.CLIENT.registerBlockRenderType(DMRegistry.OAK_DOOR.getFirst().get(), RenderType.cutoutMipped());
+        ClientServices.CLIENT.registerBlockRenderType(DMRegistry.SPRUCE_DOOR.getFirst().get(), RenderType.cutoutMipped());
+        ClientServices.CLIENT.registerBlockRenderType(DMRegistry.WARPED_DOOR.getFirst().get(), RenderType.cutoutMipped());
+        ClientServices.CLIENT.registerBlockRenderType(DMRegistry.IRON_DOOR.getFirst().get(), RenderType.cutoutMipped());
         ClientServices.CLIENT.registerBlockRenderType(DMRegistry.IRON_FENCE.get(), RenderType.cutoutMipped());
         ClientServices.CLIENT.registerMenuScreen(DMRegistry.WALLPAPERING_TABLE_MENU.get(), WallpaperingTableScreen::new);
         ClientServices.CLIENT.registerWallpaperRenderer();
