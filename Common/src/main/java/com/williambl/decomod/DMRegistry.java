@@ -67,7 +67,7 @@ public class DMRegistry {
         Map<WallpaperType, Supplier<WallpaperApplierItem>> map = new HashMap<>();
         Services.REGISTRATION_HELPER.forAllRegistered(WALLPAPER_REGISTRY.get(), (wallpaperType, wallpaperId) -> {
             ResourceLocation id;
-            if (wallpaperType instanceof DoubleWallpaperType doubleType) {
+            if (wallpaperType instanceof DoubleWallpaperType) {
                 if (wallpaperId.getPath().endsWith("_left")) {
                     id = id("wallpaper/"+wallpaperId.getNamespace()+"/"+wallpaperId.getPath().substring(0, wallpaperId.getPath().length() - "_left".length()));
                 } else {
@@ -78,6 +78,9 @@ public class DMRegistry {
             }
             var item = Services.REGISTRATION_HELPER.registerItem(id, () -> new WallpaperApplierItem(new Item.Properties(), wallpaperType));
             map.put(wallpaperType, item);
+            if (wallpaperType instanceof DoubleWallpaperType doubleType) {
+                map.put(doubleType.right.get(), item);
+            }
         });
         return map::get;
     });

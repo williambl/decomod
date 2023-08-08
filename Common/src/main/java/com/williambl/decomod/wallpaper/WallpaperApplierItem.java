@@ -22,7 +22,10 @@ public class WallpaperApplierItem extends Item {
 
         var wallpaperChunk = Services.WALLPAPERS.getWallpaperChunk(ctx.getLevel().getChunk(ctx.getClickedPos()));
         if (wallpaperChunk != null) {
-            wallpaperChunk.addWallpaper(ctx.getClickedPos().immutable(), ctx.getClickedFace(), this.type.getVariant(ctx));
+            var pos = ctx.getClickedPos().immutable();
+            var face = ctx.getClickedFace();
+            wallpaperChunk.removeWallpaper(pos, face);
+            wallpaperChunk.addWallpaper(pos, face, this.type.getVariant(ctx));
 
             ctx.getItemInHand().shrink(1);
             return InteractionResult.SUCCESS;

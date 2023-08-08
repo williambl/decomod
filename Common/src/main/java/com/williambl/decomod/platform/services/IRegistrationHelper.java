@@ -56,8 +56,8 @@ public interface IRegistrationHelper {
         AtomicReference<Supplier<DoubleWallpaperType>> rightRef = new AtomicReference<>();
         Supplier<WallpaperType> leftSup = () -> leftRef.get().get();
         Supplier<WallpaperType> rightSup = () -> rightRef.get().get();
-        leftRef.set(this.registerWallpaperType(name+"_left", () -> DoubleWallpaperType.createLeft(rightSup)));
         rightRef.set(this.registerWallpaperType(name+"_right", () -> DoubleWallpaperType.createRight(leftSup)));
+        leftRef.set(this.registerWallpaperType(name+"_left", () -> DoubleWallpaperType.createLeft(rightSup)));
         return () -> Pair.of(leftSup.get(), rightSup.get());
     }
     public <T> void forAllRegistered(Registry<T> registry, BiConsumer<T, ResourceLocation> consumer);

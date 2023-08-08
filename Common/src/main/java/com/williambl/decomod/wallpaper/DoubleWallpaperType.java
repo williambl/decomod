@@ -7,8 +7,8 @@ import net.minecraft.world.phys.Vec3;
 import java.util.function.Supplier;
 
 public class DoubleWallpaperType extends WallpaperType {
-    private final Supplier<WallpaperType> left;
-    private final Supplier<WallpaperType> right;
+    public final Supplier<WallpaperType> left;
+    public final Supplier<WallpaperType> right;
 
     private DoubleWallpaperType(Supplier<WallpaperType> left, Supplier<WallpaperType> right) {
         this.left = left == null ? () -> this : left;

@@ -16,8 +16,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -116,12 +120,27 @@ public class ChunkWallpaperComponent implements WallpaperChunk, Component, AutoS
         var res = enumMap.remove(dir);
         this.chunk.setUnsaved(true);
         KEY.sync(this.chunk);
+        if (res != null && this.chunk instanceof LevelChunk levelChunk && levelChunk.getLevel() instanceof ServerLevel level) {
+            var item = DMRegistry.WALLPAPER_ITEMS.apply(res);
+            var offset = Vec3.atLowerCornerOf(dir.getNormal()).scale(0.6);
+            if (item != null) {
+                level.addFreshEntity(new ItemEntity(level, pos.getX() + offset.x(), pos.getY() + offset.y(), pos.getZ() + offset.z(), item.get().getDefaultInstance()));
+            }
+        }
         return res;
     }
 
     @Override
     public void removeWallpaper(BlockPos pos) {
-        this.wallpapers.remove(pos);
+        var wallpapers = this.wallpapers.remove(pos);
+        if (wallpapers != null && this.chunk instanceof LevelChunk levelChunk && levelChunk.getLevel() instanceof ServerLevel level) {
+            for (var wallpaper : wallpapers.values()) {
+                var item = DMRegistry.WALLPAPER_ITEMS.apply(wallpaper);
+                if (item != null) {
+                    level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), item.get().getDefaultInstance()));
+                }
+            }
+        }
     }
 
     @NotNull
