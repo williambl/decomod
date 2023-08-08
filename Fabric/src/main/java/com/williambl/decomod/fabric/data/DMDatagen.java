@@ -16,10 +16,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.ItemModelGenerators;
 import net.minecraft.data.models.blockstates.*;
-import net.minecraft.data.models.model.ModelTemplate;
-import net.minecraft.data.models.model.ModelTemplates;
-import net.minecraft.data.models.model.TextureMapping;
-import net.minecraft.data.models.model.TextureSlot;
+import net.minecraft.data.models.model.*;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -79,6 +76,21 @@ public class DMDatagen implements DataGeneratorEntrypoint {
             ResourceLocation topRight = DOOR_TOP_RIGHT.create(block, texturemapping, generators.modelOutput);
             generators.createSimpleFlatItemModel(block.asItem());
             generators.blockStateOutput.accept(BlockModelGenerators.createDoor(block, bottomLeft, bottomRight, bottomRight, bottomLeft, topLeft, topRight, topRight, topLeft));
+        }
+
+
+        private void createPremadeDoor(Block block, BlockModelGenerators generators) {
+            TextureMapping texturemapping = TextureMapping.door(block);
+            ResourceLocation bottomLeft = ModelLocationUtils.getModelLocation(block, "_bottom_left");
+            ResourceLocation bottomLeftOpen = ModelLocationUtils.getModelLocation(block, "_bottom_left_open");
+            ResourceLocation bottomRight = ModelLocationUtils.getModelLocation(block, "_bottom_right");
+            ResourceLocation bottomRightOpen = ModelLocationUtils.getModelLocation(block, "_bottom_right_open");
+            ResourceLocation topLeft = ModelLocationUtils.getModelLocation(block, "_top_left");
+            ResourceLocation topLeftOpen = ModelLocationUtils.getModelLocation(block, "_top_left_open");
+            ResourceLocation topRight = ModelLocationUtils.getModelLocation(block, "_top_right");
+            ResourceLocation topRightOpen = ModelLocationUtils.getModelLocation(block, "_top_right_open");
+            generators.createSimpleFlatItemModel(block.asItem());
+            generators.blockStateOutput.accept(BlockModelGenerators.createDoor(block, bottomLeft, bottomLeftOpen, bottomRight, bottomRightOpen, topLeft, topLeftOpen, topRight, topRightOpen));
         }
 
         private void createIronFence(Block block, BlockModelGenerators generators) {
@@ -149,6 +161,7 @@ public class DMDatagen implements DataGeneratorEntrypoint {
             createDoor(DMRegistry.SPRUCE_DOOR.getFirst().get(), blockStateModelGenerator);
             createDoor(DMRegistry.WARPED_DOOR.getFirst().get(), blockStateModelGenerator);
             createDoor(DMRegistry.IRON_DOOR.getFirst().get(), blockStateModelGenerator);
+            createPremadeDoor(DMRegistry.CHAIN_LINK_DOOR.getFirst().get(), blockStateModelGenerator);
             createIronFence(DMRegistry.IRON_FENCE.get(), blockStateModelGenerator);
             createWallpaperingTable(blockStateModelGenerator);
         }

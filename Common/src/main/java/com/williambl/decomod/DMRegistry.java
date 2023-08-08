@@ -47,6 +47,9 @@ public class DMRegistry {
     public static final Supplier<IronBarsBlock> IRON_FENCE =
             Services.REGISTRATION_HELPER.registerBlock("iron_fence", () -> new IronFenceBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BARS)) {}, new Item.Properties());
 
+    public static final Pair<Supplier<DoorBlock>, Supplier<DoubleHighBlockItem>> CHAIN_LINK_DOOR =
+            Services.REGISTRATION_HELPER.registerDoor("chain_link_door", () -> new ChainLinkDoorBlock(BlockBehaviour.Properties.copy(Blocks.IRON_DOOR), BlockSetType.IRON), new Item.Properties());
+
     public static final Supplier<Registry<WallpaperType>> WALLPAPER_REGISTRY =
             Services.REGISTRATION_HELPER.registerRegistry("wallpaper_type", WallpaperType.class);
 

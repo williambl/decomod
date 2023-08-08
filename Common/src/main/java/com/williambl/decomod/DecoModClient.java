@@ -29,6 +29,7 @@ public class DecoModClient {
         ClientServices.CLIENT.registerBlockRenderType(DMRegistry.WARPED_DOOR.getFirst().get(), RenderType.cutoutMipped());
         ClientServices.CLIENT.registerBlockRenderType(DMRegistry.IRON_DOOR.getFirst().get(), RenderType.cutoutMipped());
         ClientServices.CLIENT.registerBlockRenderType(DMRegistry.IRON_FENCE.get(), RenderType.cutoutMipped());
+        ClientServices.CLIENT.registerBlockRenderType(DMRegistry.CHAIN_LINK_DOOR.getFirst().get(), RenderType.cutoutMipped());
         ClientServices.CLIENT.registerMenuScreen(DMRegistry.WALLPAPERING_TABLE_MENU.get(), WallpaperingTableScreen::new);
         ClientServices.CLIENT.registerWallpaperRenderer();
         ClientServices.CLIENT.forceLoadModels(out -> {
