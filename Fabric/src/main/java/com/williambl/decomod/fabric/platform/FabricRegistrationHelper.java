@@ -1,15 +1,19 @@
 package com.williambl.decomod.fabric.platform;
 
+import com.williambl.decomod.Constants;
 import com.williambl.decomod.DMRegistry;
 import com.williambl.decomod.platform.services.IRegistrationHelper;
 import com.williambl.decomod.wallpaper.WallpaperType;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
@@ -19,7 +23,9 @@ import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
@@ -27,6 +33,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -35,6 +42,12 @@ import java.util.function.Supplier;
 import static com.williambl.decomod.DecoMod.id;
 
 public class FabricRegistrationHelper implements IRegistrationHelper {
+    @Override
+    public Supplier<CreativeModeTab> registerCreativeModeTab(String name, Supplier<ItemStack> icon, CreativeModeTab.DisplayItemsGenerator generator) {
+        final var res = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, id(name), FabricItemGroup.builder().title(Component.translatable(Util.makeDescriptionId("itemGroup", id(name)))).icon(icon).displayItems(generator).build());
+        return () -> res;
+    }
+
     @Override
     public <T extends Item> Supplier<T> registerItem(String name, Supplier<T> sup) {
         final var res = Registry.register(BuiltInRegistries.ITEM, id(name), sup.get());

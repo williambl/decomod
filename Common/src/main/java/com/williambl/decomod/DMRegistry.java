@@ -5,7 +5,10 @@ import com.williambl.decomod.platform.Services;
 import com.williambl.decomod.wallpaper.*;
 import net.minecraft.Util;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DoubleHighBlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -24,6 +27,8 @@ import java.util.function.Supplier;
 import static com.williambl.decomod.DecoMod.id;
 
 public class DMRegistry {
+
+    public static final Supplier<CreativeModeTab> TAB = Services.REGISTRATION_HELPER.registerCreativeModeTab("decomod", () -> DMRegistry.WALLPAPERING_TABLE_BLOCK.get().asItem().getDefaultInstance(), (itemDisplayParameters, output) -> {output.acceptAll(BuiltInRegistries.ITEM.entrySet().stream().filter(kv -> kv.getKey().location().getNamespace().equals(Constants.MOD_ID)).map(Map.Entry::getValue).map(Item::getDefaultInstance).toList());});
     public static final Pair<Supplier<DoorBlock>, Supplier<DoubleHighBlockItem>> ACACIA_DOOR =
             Services.REGISTRATION_HELPER.registerDoor("acacia_door", BlockSetType.ACACIA, BlockBehaviour.Properties.copy(Blocks.ACACIA_DOOR), new Item.Properties());
     public static final Pair<Supplier<DoorBlock>, Supplier<DoubleHighBlockItem>> BIRCH_DOOR =

@@ -11,9 +11,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.DoubleHighBlockItem;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
@@ -29,6 +27,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.*;
 
 public interface IRegistrationHelper {
+    public Supplier<CreativeModeTab> registerCreativeModeTab(String name, Supplier<ItemStack> icon, CreativeModeTab.DisplayItemsGenerator generator);
     public <T extends Item> Supplier<T> registerItem(String name, Supplier<T> sup);
     public <T extends Item> Supplier<T> registerItem(ResourceLocation name, Supplier<T> sup);
     public <T extends Block> Supplier<T> registerBlock(String name, Supplier<T> sup);
