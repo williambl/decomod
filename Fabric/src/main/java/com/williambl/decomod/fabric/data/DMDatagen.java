@@ -19,6 +19,7 @@ import net.minecraft.data.models.blockstates.*;
 import net.minecraft.data.models.model.*;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -68,13 +69,13 @@ public class DMDatagen implements DataGeneratorEntrypoint {
             super(dataGenerator);
         }
 
-        private void createDoor(Block block, BlockModelGenerators generators) {
+        private void createDoor(Block block, BlockModelGenerators generators, Item itemToStealTextureFrom) {
             TextureMapping texturemapping = TextureMapping.door(block);
             ResourceLocation bottomLeft = DOOR_BOTTOM_LEFT.create(block, texturemapping, generators.modelOutput);
             ResourceLocation bottomRight = DOOR_BOTTOM_RIGHT.create(block, texturemapping, generators.modelOutput);
             ResourceLocation topLeft = DOOR_TOP_LEFT.create(block, texturemapping, generators.modelOutput);
             ResourceLocation topRight = DOOR_TOP_RIGHT.create(block, texturemapping, generators.modelOutput);
-            generators.createSimpleFlatItemModel(block.asItem());
+            generators.delegateItemModel(block.asItem(), ModelLocationUtils.getModelLocation(itemToStealTextureFrom));
             generators.blockStateOutput.accept(BlockModelGenerators.createDoor(block, bottomLeft, bottomRight, bottomRight, bottomLeft, topLeft, topRight, topRight, topLeft));
         }
 
@@ -99,7 +100,7 @@ public class DMDatagen implements DataGeneratorEntrypoint {
             ResourceLocation corner = FENCE_CORNER.create(block, textureMapping, generators.modelOutput);
             ResourceLocation end = FENCE_END.create(block, textureMapping, generators.modelOutput);
             ResourceLocation post = FENCE_POST.create(block, textureMapping, generators.modelOutput);
-            generators.createSimpleFlatItemModel(block.asItem());
+            generators.createSimpleFlatItemModel(block, "_panel");
             generators.blockStateOutput.accept(MultiPartGenerator.multiPart(block)
                     .with(  // panel e-w
                             Condition.condition().term(BlockStateProperties.EAST, true).term(BlockStateProperties.WEST, true),
@@ -151,16 +152,16 @@ public class DMDatagen implements DataGeneratorEntrypoint {
 
         @Override
         public void generateBlockStateModels(BlockModelGenerators blockStateModelGenerator) {
-            createDoor(DMRegistry.ACACIA_DOOR.getFirst().get(), blockStateModelGenerator);
-            createDoor(DMRegistry.BIRCH_DOOR.getFirst().get(), blockStateModelGenerator);
-            createDoor(DMRegistry.CRIMSON_DOOR.getFirst().get(), blockStateModelGenerator);
-            createDoor(DMRegistry.DARK_OAK_DOOR.getFirst().get(), blockStateModelGenerator);
-            createDoor(DMRegistry.JUNGLE_DOOR.getFirst().get(), blockStateModelGenerator);
-            createDoor(DMRegistry.MANGROVE_DOOR.getFirst().get(), blockStateModelGenerator);
-            createDoor(DMRegistry.OAK_DOOR.getFirst().get(), blockStateModelGenerator);
-            createDoor(DMRegistry.SPRUCE_DOOR.getFirst().get(), blockStateModelGenerator);
-            createDoor(DMRegistry.WARPED_DOOR.getFirst().get(), blockStateModelGenerator);
-            createDoor(DMRegistry.IRON_DOOR.getFirst().get(), blockStateModelGenerator);
+            createDoor(DMRegistry.ACACIA_DOOR.getFirst().get(), blockStateModelGenerator, Items.ACACIA_DOOR);
+            createDoor(DMRegistry.BIRCH_DOOR.getFirst().get(), blockStateModelGenerator, Items.BIRCH_DOOR);
+            createDoor(DMRegistry.CRIMSON_DOOR.getFirst().get(), blockStateModelGenerator, Items.CRIMSON_DOOR);
+            createDoor(DMRegistry.DARK_OAK_DOOR.getFirst().get(), blockStateModelGenerator, Items.DARK_OAK_DOOR);
+            createDoor(DMRegistry.JUNGLE_DOOR.getFirst().get(), blockStateModelGenerator, Items.JUNGLE_DOOR);
+            createDoor(DMRegistry.MANGROVE_DOOR.getFirst().get(), blockStateModelGenerator, Items.MANGROVE_DOOR);
+            createDoor(DMRegistry.OAK_DOOR.getFirst().get(), blockStateModelGenerator, Items.OAK_DOOR);
+            createDoor(DMRegistry.SPRUCE_DOOR.getFirst().get(), blockStateModelGenerator, Items.SPRUCE_DOOR);
+            createDoor(DMRegistry.WARPED_DOOR.getFirst().get(), blockStateModelGenerator, Items.WARPED_DOOR);
+            createDoor(DMRegistry.IRON_DOOR.getFirst().get(), blockStateModelGenerator, Items.IRON_DOOR);
             createPremadeDoor(DMRegistry.CHAIN_LINK_DOOR.getFirst().get(), blockStateModelGenerator);
             createIronFence(DMRegistry.IRON_FENCE.get(), blockStateModelGenerator);
             createWallpaperingTable(blockStateModelGenerator);
