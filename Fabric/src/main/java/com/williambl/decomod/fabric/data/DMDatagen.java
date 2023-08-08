@@ -169,6 +169,7 @@ public class DMDatagen implements DataGeneratorEntrypoint {
             createDoor(DMRegistry.OAK_DOOR.getFirst().get(), blockStateModelGenerator, Items.OAK_DOOR);
             createDoor(DMRegistry.SPRUCE_DOOR.getFirst().get(), blockStateModelGenerator, Items.SPRUCE_DOOR);
             createDoor(DMRegistry.WARPED_DOOR.getFirst().get(), blockStateModelGenerator, Items.WARPED_DOOR);
+            createDoor(DMRegistry.CHERRY_DOOR.getFirst().get(), blockStateModelGenerator, Items.CHERRY_DOOR);
             createDoor(DMRegistry.IRON_DOOR.getFirst().get(), blockStateModelGenerator, Items.IRON_DOOR);
             createPremadeDoor(DMRegistry.CHAIN_LINK_DOOR.getFirst().get(), blockStateModelGenerator);
             createIronFence(DMRegistry.IRON_FENCE.get(), blockStateModelGenerator);
@@ -198,6 +199,7 @@ public class DMDatagen implements DataGeneratorEntrypoint {
                     DMRegistry.OAK_DOOR.getFirst().get().builtInRegistryHolder().key(),
                     DMRegistry.SPRUCE_DOOR.getFirst().get().builtInRegistryHolder().key(),
                     DMRegistry.WARPED_DOOR.getFirst().get().builtInRegistryHolder().key(),
+                    DMRegistry.CHERRY_DOOR.getFirst().get().builtInRegistryHolder().key(),
                     DMRegistry.IRON_DOOR.getFirst().get().builtInRegistryHolder().key(),
                     DMRegistry.CHAIN_LINK_DOOR.getFirst().get().builtInRegistryHolder().key()
             );
@@ -221,6 +223,7 @@ public class DMDatagen implements DataGeneratorEntrypoint {
                     DMRegistry.OAK_DOOR.getFirst().get().asItem().builtInRegistryHolder().key(),
                     DMRegistry.SPRUCE_DOOR.getFirst().get().asItem().builtInRegistryHolder().key(),
                     DMRegistry.WARPED_DOOR.getFirst().get().asItem().builtInRegistryHolder().key(),
+                    DMRegistry.CHERRY_DOOR.getFirst().get().asItem().builtInRegistryHolder().key(),
                     DMRegistry.IRON_DOOR.getFirst().get().asItem().builtInRegistryHolder().key(),
                     DMRegistry.CHAIN_LINK_DOOR.getFirst().get().asItem().builtInRegistryHolder().key()
             );
@@ -247,6 +250,7 @@ public class DMDatagen implements DataGeneratorEntrypoint {
             exportTrim(Items.OAK_PLANKS, DMRegistry.OAK_TRIM.get(), "oak_trim", exporter);
             exportTrim(Items.SPRUCE_PLANKS, DMRegistry.SPRUCE_TRIM.get(), "spruce_trim", exporter);
             exportTrim(Items.WARPED_PLANKS, DMRegistry.WARPED_TRIM.get(), "warped_trim", exporter);
+            exportTrim(Items.CHERRY_PLANKS, DMRegistry.CHERRY_TRIM.get(), "cherry_trim", exporter);
             exportQuoins(Items.BRICKS, DMRegistry.BRICKS_QUOIN.get(), "bricks_quoin", exporter);
             exportQuoins(Items.DEEPSLATE_BRICKS, DMRegistry.DEEPSLATE_BRICKS_QUOIN.get(), "deepslate_bricks_quoin", exporter);
             exportQuoins(Items.END_STONE_BRICKS, DMRegistry.END_STONE_BRICKS_QUOIN.get(), "end_stone_bricks_quoin", exporter);
@@ -306,6 +310,7 @@ public class DMDatagen implements DataGeneratorEntrypoint {
             this.createDoorTable(DMRegistry.OAK_DOOR.getFirst().get());
             this.createDoorTable(DMRegistry.SPRUCE_DOOR.getFirst().get());
             this.createDoorTable(DMRegistry.WARPED_DOOR.getFirst().get());
+            this.createDoorTable(DMRegistry.CHERRY_DOOR.getFirst().get());
             this.createDoorTable(DMRegistry.IRON_DOOR.getFirst().get());
             this.createDoorTable(DMRegistry.CHAIN_LINK_DOOR.getFirst().get());
         }
@@ -327,6 +332,7 @@ public class DMDatagen implements DataGeneratorEntrypoint {
             builder.add(DMRegistry.OAK_DOOR.getFirst().get(), "Oak Door");
             builder.add(DMRegistry.SPRUCE_DOOR.getFirst().get(), "Spruce Door");
             builder.add(DMRegistry.WARPED_DOOR.getFirst().get(), "Warped Door");
+            builder.add(DMRegistry.CHERRY_DOOR.getFirst().get(), "Cherry Door");
             builder.add(DMRegistry.IRON_DOOR.getFirst().get(), "Iron Door");
             builder.add(DMRegistry.CHAIN_LINK_DOOR.getFirst().get(), "Chain-Link Door");
             builder.add(DMRegistry.IRON_FENCE.get(), "Iron Fence");

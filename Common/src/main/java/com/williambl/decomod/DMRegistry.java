@@ -49,6 +49,8 @@ public class DMRegistry {
             Services.REGISTRATION_HELPER.registerDoor("spruce_door", BlockSetType.SPRUCE, BlockBehaviour.Properties.copy(Blocks.SPRUCE_DOOR), new Item.Properties());
     public static final Pair<Supplier<DoorBlock>, Supplier<DoubleHighBlockItem>> WARPED_DOOR =
             Services.REGISTRATION_HELPER.registerDoor("warped_door", BlockSetType.WARPED, BlockBehaviour.Properties.copy(Blocks.WARPED_DOOR), new Item.Properties());
+    public static final Pair<Supplier<DoorBlock>, Supplier<DoubleHighBlockItem>> CHERRY_DOOR =
+            Services.REGISTRATION_HELPER.registerDoor("cherry_door", BlockSetType.CHERRY, BlockBehaviour.Properties.copy(Blocks.CHERRY_DOOR), new Item.Properties());
     public static final Pair<Supplier<DoorBlock>, Supplier<DoubleHighBlockItem>> IRON_DOOR =
             Services.REGISTRATION_HELPER.registerDoor("iron_door", BlockSetType.IRON, BlockBehaviour.Properties.copy(Blocks.IRON_DOOR), new Item.Properties());
     public static final Supplier<IronBarsBlock> IRON_FENCE =
@@ -127,6 +129,8 @@ public class DMRegistry {
             Services.REGISTRATION_HELPER.registerWallpaperType("spruce_trim", WallpaperType::new);
     public static final Supplier<WallpaperType> WARPED_TRIM =
             Services.REGISTRATION_HELPER.registerWallpaperType("warped_trim", WallpaperType::new);
+    public static final Supplier<WallpaperType> CHERRY_TRIM =
+            Services.REGISTRATION_HELPER.registerWallpaperType("cherry_trim", WallpaperType::new);
     public static final Supplier<Pair<WallpaperType, WallpaperType>> BRICKS_QUOIN =
             Services.REGISTRATION_HELPER.registerWallpaperTypeLeftAndRight("bricks_quoin");
 

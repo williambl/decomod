@@ -28,6 +28,7 @@ public class DecoModClient {
         ClientServices.CLIENT.registerBlockRenderType(DMRegistry.OAK_DOOR.getFirst().get(), RenderType.cutoutMipped());
         ClientServices.CLIENT.registerBlockRenderType(DMRegistry.SPRUCE_DOOR.getFirst().get(), RenderType.cutoutMipped());
         ClientServices.CLIENT.registerBlockRenderType(DMRegistry.WARPED_DOOR.getFirst().get(), RenderType.cutoutMipped());
+        ClientServices.CLIENT.registerBlockRenderType(DMRegistry.CHERRY_DOOR.getFirst().get(), RenderType.cutoutMipped());
         ClientServices.CLIENT.registerBlockRenderType(DMRegistry.IRON_DOOR.getFirst().get(), RenderType.cutoutMipped());
         ClientServices.CLIENT.registerBlockRenderType(DMRegistry.IRON_FENCE.get(), RenderType.cutoutMipped());
         ClientServices.CLIENT.registerBlockRenderType(DMRegistry.CHAIN_LINK_DOOR.getFirst().get(), RenderType.cutoutMipped());
