@@ -1,6 +1,7 @@
 package com.williambl.decomod;
 
 import com.mojang.datafixers.util.Pair;
+import com.sun.jna.platform.unix.solaris.LibKstat;
 import com.williambl.decomod.platform.Services;
 import com.williambl.decomod.wallpaper.*;
 import net.minecraft.Util;
@@ -72,7 +73,7 @@ public class DMRegistry {
     });
 
     public static final Supplier<WallpaperingTableBlock> WALLPAPERING_TABLE_BLOCK =
-            Services.REGISTRATION_HELPER.registerBlock("wallpapering_table", () -> new WallpaperingTableBlock(BlockBehaviour.Properties.copy(Blocks.CARTOGRAPHY_TABLE)));
+            Services.REGISTRATION_HELPER.registerBlock("wallpapering_table", () -> new WallpaperingTableBlock(BlockBehaviour.Properties.copy(Blocks.CARTOGRAPHY_TABLE)), new Item.Properties());
 
     public static final Supplier<RecipeType<WallpaperingRecipe>> WALLPAPERING_RECIPE_TYPE =
             Services.REGISTRATION_HELPER.registerRecipeType("wallpapering", () -> new RecipeType<>() {
