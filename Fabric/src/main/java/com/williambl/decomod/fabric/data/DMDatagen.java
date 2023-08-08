@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.*;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 import net.minecraft.Util;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.core.HolderLookup;
@@ -18,11 +19,18 @@ import net.minecraft.data.models.ItemModelGenerators;
 import net.minecraft.data.models.blockstates.*;
 import net.minecraft.data.models.model.*;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -180,6 +188,19 @@ public class DMDatagen implements DataGeneratorEntrypoint {
 
         @Override
         protected void addTags(HolderLookup.Provider arg) {
+            this.tag(BlockTags.DOORS).add(
+                    DMRegistry.ACACIA_DOOR.getFirst().get().builtInRegistryHolder().key(),
+                    DMRegistry.BIRCH_DOOR.getFirst().get().builtInRegistryHolder().key(),
+                    DMRegistry.CRIMSON_DOOR.getFirst().get().builtInRegistryHolder().key(),
+                    DMRegistry.DARK_OAK_DOOR.getFirst().get().builtInRegistryHolder().key(),
+                    DMRegistry.JUNGLE_DOOR.getFirst().get().builtInRegistryHolder().key(),
+                    DMRegistry.MANGROVE_DOOR.getFirst().get().builtInRegistryHolder().key(),
+                    DMRegistry.OAK_DOOR.getFirst().get().builtInRegistryHolder().key(),
+                    DMRegistry.SPRUCE_DOOR.getFirst().get().builtInRegistryHolder().key(),
+                    DMRegistry.WARPED_DOOR.getFirst().get().builtInRegistryHolder().key(),
+                    DMRegistry.IRON_DOOR.getFirst().get().builtInRegistryHolder().key(),
+                    DMRegistry.CHAIN_LINK_DOOR.getFirst().get().builtInRegistryHolder().key()
+            );
         }
     }
 
@@ -190,7 +211,19 @@ public class DMDatagen implements DataGeneratorEntrypoint {
 
         @Override
         protected void addTags(HolderLookup.Provider arg) {
-
+            this.tag(ItemTags.DOORS).add(
+                    DMRegistry.ACACIA_DOOR.getFirst().get().asItem().builtInRegistryHolder().key(),
+                    DMRegistry.BIRCH_DOOR.getFirst().get().asItem().builtInRegistryHolder().key(),
+                    DMRegistry.CRIMSON_DOOR.getFirst().get().asItem().builtInRegistryHolder().key(),
+                    DMRegistry.DARK_OAK_DOOR.getFirst().get().asItem().builtInRegistryHolder().key(),
+                    DMRegistry.JUNGLE_DOOR.getFirst().get().asItem().builtInRegistryHolder().key(),
+                    DMRegistry.MANGROVE_DOOR.getFirst().get().asItem().builtInRegistryHolder().key(),
+                    DMRegistry.OAK_DOOR.getFirst().get().asItem().builtInRegistryHolder().key(),
+                    DMRegistry.SPRUCE_DOOR.getFirst().get().asItem().builtInRegistryHolder().key(),
+                    DMRegistry.WARPED_DOOR.getFirst().get().asItem().builtInRegistryHolder().key(),
+                    DMRegistry.IRON_DOOR.getFirst().get().asItem().builtInRegistryHolder().key(),
+                    DMRegistry.CHAIN_LINK_DOOR.getFirst().get().asItem().builtInRegistryHolder().key()
+            );
         }
     }
 
@@ -221,6 +254,23 @@ public class DMDatagen implements DataGeneratorEntrypoint {
             exportQuoins(Items.POLISHED_BLACKSTONE_BRICKS, DMRegistry.POLISHED_BLACKSTONE_BRICKS_QUOIN.get(), "polished_blackstone_bricks_quoin", exporter);
             exportQuoins(Items.QUARTZ_BRICKS, DMRegistry.QUARTZ_BRICKS_QUOIN.get(), "quartz_bricks_quoin", exporter);
             exportQuoins(Items.STONE_BRICKS, DMRegistry.STONE_BRICKS_QUOIN.get(), "stone_bricks_quoin", exporter);
+
+            ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, DMRegistry.WALLPAPER_SCRAPER.get())
+                    .requires(Items.STICK)
+                    .requires(Items.PAPER, 2)
+                    .requires(Items.IRON_INGOT)
+                    .unlockedBy("has_paper", has(Items.PAPER))
+                    .save(exporter, id("wallpaper_scraper"));
+
+            ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, DMRegistry.WALLPAPERING_TABLE_BLOCK.get())
+                    .pattern("pip")
+                    .pattern("www")
+                    .pattern("www")
+                    .define('w', ItemTags.PLANKS)
+                    .define('p', Items.PAPER)
+                    .define('i', ConventionalItemTags.DYES)
+                    .unlockedBy("has_paper", has(Items.PAPER))
+                    .save(exporter, id("wallpapering_table"));
         }
 
         private static WallpaperingRecipe.Builder wallpaperFromItem(ItemLike itemLike, WallpaperType wallpaper, int count) {
@@ -247,6 +297,17 @@ public class DMDatagen implements DataGeneratorEntrypoint {
 
         @Override
         public void generate() {
+            this.createDoorTable(DMRegistry.ACACIA_DOOR.getFirst().get());
+            this.createDoorTable(DMRegistry.BIRCH_DOOR.getFirst().get());
+            this.createDoorTable(DMRegistry.CRIMSON_DOOR.getFirst().get());
+            this.createDoorTable(DMRegistry.DARK_OAK_DOOR.getFirst().get());
+            this.createDoorTable(DMRegistry.JUNGLE_DOOR.getFirst().get());
+            this.createDoorTable(DMRegistry.MANGROVE_DOOR.getFirst().get());
+            this.createDoorTable(DMRegistry.OAK_DOOR.getFirst().get());
+            this.createDoorTable(DMRegistry.SPRUCE_DOOR.getFirst().get());
+            this.createDoorTable(DMRegistry.WARPED_DOOR.getFirst().get());
+            this.createDoorTable(DMRegistry.IRON_DOOR.getFirst().get());
+            this.createDoorTable(DMRegistry.CHAIN_LINK_DOOR.getFirst().get());
         }
     }
 
@@ -267,10 +328,12 @@ public class DMDatagen implements DataGeneratorEntrypoint {
             builder.add(DMRegistry.SPRUCE_DOOR.getFirst().get(), "Spruce Door");
             builder.add(DMRegistry.WARPED_DOOR.getFirst().get(), "Warped Door");
             builder.add(DMRegistry.IRON_DOOR.getFirst().get(), "Iron Door");
+            builder.add(DMRegistry.CHAIN_LINK_DOOR.getFirst().get(), "Chain-Link Door");
             builder.add(DMRegistry.IRON_FENCE.get(), "Iron Fence");
             builder.add(DMRegistry.WALLPAPER_SCRAPER.get(), "Wallpaper Scraper");
             builder.add(DMRegistry.WALLPAPERING_TABLE_BLOCK.get(), "Wallpapering Table");
             builder.add(WallpaperingTableBlock.CONTAINER_TITLE_KEY, "Wallpapering Table");
+            builder.add(Util.makeDescriptionId("itemGroup", id("decomod")), "DecoMod");
             add(builder, DMRegistry.TEST_WALLPAPER.get(), "Test Wallpaper");
             add(builder, DMRegistry.IRON_BAND.get(), "Iron Band");
             add(builder, DMRegistry.ACACIA_TRIM.get(), "Acacia Trim");
