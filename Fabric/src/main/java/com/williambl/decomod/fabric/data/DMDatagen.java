@@ -234,10 +234,7 @@ public class DMDatagen implements DataGeneratorEntrypoint {
         private static void exportQuoins(ItemLike bricks, Pair<WallpaperType, WallpaperType> quoins, String name, Consumer<FinishedRecipe> exporter) {
             wallpaperFromItem(bricks, quoins.getFirst(), 6)
                     .unlocks("has_bricks", has(bricks))
-                    .save(exporter, id(name+"_left"));
-            wallpaperFromItem(bricks, quoins.getSecond(), 6)
-                    .unlocks("has_bricks", has(bricks))
-                    .save(exporter, id(name+"_right"));
+                    .save(exporter, id(name));
         }
     }
 

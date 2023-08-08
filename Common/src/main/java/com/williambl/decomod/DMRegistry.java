@@ -8,6 +8,7 @@ import net.minecraft.Util;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DoubleHighBlockItem;
@@ -65,7 +66,16 @@ public class DMRegistry {
     public static final Function<WallpaperType, Supplier<WallpaperApplierItem>> WALLPAPER_ITEMS = Util.make(() -> {
         Map<WallpaperType, Supplier<WallpaperApplierItem>> map = new HashMap<>();
         Services.REGISTRATION_HELPER.forAllRegistered(WALLPAPER_REGISTRY.get(), (wallpaperType, wallpaperId) -> {
-            var id = id("wallpaper/"+wallpaperId.getNamespace()+"/"+wallpaperId.getPath());
+            ResourceLocation id;
+            if (wallpaperType instanceof DoubleWallpaperType doubleType) {
+                if (wallpaperId.getPath().endsWith("_left")) {
+                    id = id("wallpaper/"+wallpaperId.getNamespace()+"/"+wallpaperId.getPath().substring(0, wallpaperId.getPath().length() - "_left".length()));
+                } else {
+                    return;
+                }
+            } else {
+                id = id("wallpaper/" + wallpaperId.getNamespace() + "/" + wallpaperId.getPath());
+            }
             var item = Services.REGISTRATION_HELPER.registerItem(id, () -> new WallpaperApplierItem(new Item.Properties(), wallpaperType));
             map.put(wallpaperType, item);
         });

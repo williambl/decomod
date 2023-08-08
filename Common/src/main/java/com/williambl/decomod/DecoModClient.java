@@ -3,6 +3,7 @@ package com.williambl.decomod;
 import com.williambl.decomod.client.WallpaperingTableScreen;
 import com.williambl.decomod.platform.ClientServices;
 import com.williambl.decomod.platform.Services;
+import com.williambl.decomod.wallpaper.DoubleWallpaperType;
 import com.williambl.decomod.wallpaper.WallpaperingTableMenu;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.RenderType;
@@ -42,6 +43,9 @@ public class DecoModClient {
         Services.REGISTRATION_HELPER.forAllRegistered(DMRegistry.WALLPAPER_REGISTRY.get(), (wallpaperType, wallpaperId) -> {
             var texture = new ResourceLocation(wallpaperId.getNamespace(), "wallpaper/"+wallpaperId.getPath());
             ClientServices.CLIENT.addModelToRuntimeResourcePack(id("item/wallpaper/"+wallpaperId.getNamespace()+"/"+wallpaperId.getPath()), new ResourceLocation("item/generated"), Map.of("layer0", texture));
+            if (wallpaperType instanceof DoubleWallpaperType && wallpaperId.getPath().endsWith("_left")) {
+                ClientServices.CLIENT.addModelToRuntimeResourcePack(id("item/wallpaper/" + wallpaperId.getNamespace() + "/" + wallpaperId.getPath().substring(0, wallpaperId.getPath().length()-"_left".length())), new ResourceLocation("item/generated"), Map.of("layer0", texture));
+            }
             for (var dir : Direction.values()) {
                 ClientServices.CLIENT.addModelToRuntimeResourcePack(
                         new ResourceLocation(wallpaperId.getNamespace(), "wallpaper/" + wallpaperId.getPath() + "/" + dir.getName()),
