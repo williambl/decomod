@@ -168,6 +168,7 @@ public class DMDatagen implements DataGeneratorEntrypoint {
 
         @Override
         public void generateItemModels(ItemModelGenerators itemModelGenerator) {
+            itemModelGenerator.generateFlatItem(DMRegistry.WALLPAPER_SCRAPER.get(), ModelTemplates.FLAT_ITEM); // wallpaper scraper texture temporarily from https://github.com/malcolmriley/unused-textures (cc-0)
         }
     }
 
