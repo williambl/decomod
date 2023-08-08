@@ -1,33 +1,34 @@
 package com.williambl.decomod.client;
 
-import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.williambl.decomod.platform.Services;
 import com.williambl.decomod.wallpaper.WallpaperChunk;
 import net.minecraft.client.Camera;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.block.ModelBlockRenderer;
-import net.minecraft.client.renderer.chunk.ChunkRenderDispatcher;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.resources.model.ModelManager;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.block.state.BlockState;
 
+import javax.annotation.Nullable;
+import java.util.BitSet;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public final class WallpaperRenderer {
+    private static final Direction[] DIRECTIONS = Direction.values();
     public static void renderWallpapers(
             PoseStack poseStack,
             MultiBufferSource buffers,
@@ -81,24 +82,12 @@ public final class WallpaperRenderer {
                     continue;
                 }
 
-                int blockLight = level.getBrightness(LightLayer.BLOCK, pos.relative(dir));
-                int skyLight = level.getBrightness(LightLayer.SKY, pos.relative(dir));
-                int packedLight = LightTexture.pack(blockLight, skyLight);
-                int tint = wallpaper.getTint();
+                int tint = wallpaper.getTint(); //TODO
                 RenderType renderType = RenderType.cutoutMipped();
                 var vertexConsumer = buffers.getBuffer(renderType);
+                var state = level.getBlockState(pos);
 
-                modelBlockRenderer.renderModel(
-                        stack.last(),
-                        vertexConsumer,
-                        null,
-                        modelManager.getModelFromResLoc(wallpaper.getModelLocation(dir)),
-                        FastColor.ARGB32.red(tint),
-                        FastColor.ARGB32.green(tint),
-                        FastColor.ARGB32.blue(tint),
-                        packedLight,
-                        OverlayTexture.NO_OVERLAY
-                );
+                modelBlockRenderer.tesselateWithAO(level, modelManager.getModelFromResLoc(wallpaper.getModelLocation(dir)), state, pos, stack, vertexConsumer, false, RandomSource.create(), state.getSeed(pos), OverlayTexture.NO_OVERLAY);
             }
             stack.popPose();
         }
