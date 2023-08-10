@@ -340,7 +340,6 @@ public class DMDatagen implements DataGeneratorEntrypoint {
             builder.add(DMRegistry.WALLPAPERING_TABLE_BLOCK.get(), "Wallpapering Table");
             builder.add(WallpaperingTableBlock.CONTAINER_TITLE_KEY, "Wallpapering Table");
             builder.add(Util.makeDescriptionId("itemGroup", id("decomod")), "DecoMod");
-            add(builder, DMRegistry.TEST_WALLPAPER.get(), "Test Wallpaper");
             add(builder, DMRegistry.IRON_BAND.get(), "Iron Band");
             add(builder, DMRegistry.ACACIA_TRIM.get(), "Acacia Trim");
             add(builder, DMRegistry.BIRCH_TRIM.get(), "Birch Trim");
