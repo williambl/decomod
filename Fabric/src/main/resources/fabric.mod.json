@@ -38,10 +38,12 @@
       "decomod.mixins.json",
       "decomod_common.mixins.json"
     ],
+  "accessWidener": "decomod.accesswidener",
   
     "depends": {
       "fabricloader": ">=0.14",
       "fabric": "*",
+      "cardinal-components-chunk": ">=5.0.0",
       "minecraft": "1.20.x",
       "java": ">=17"
     },
