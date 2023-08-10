@@ -267,9 +267,9 @@ public class DMDatagen implements DataGeneratorEntrypoint {
                     .save(exporter, id("wallpaper_scraper"));
 
             ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, DMRegistry.WALLPAPERING_TABLE_BLOCK.get())
-                    .pattern("pip")
-                    .pattern("www")
-                    .pattern("www")
+                    .pattern("pi ")
+                    .pattern("ww ")
+                    .pattern("ww ")
                     .define('w', ItemTags.PLANKS)
                     .define('p', Items.PAPER)
                     .define('i', ConventionalItemTags.DYES)
