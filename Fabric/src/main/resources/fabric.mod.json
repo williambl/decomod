@@ -4,13 +4,13 @@
     "version": "${version}",
   
     "name": "DecoMod",
-    "description": "",
+    "description": "Adds wallpapers, better doors, trims, quoins, and more!",
     "authors": [
       "Will BL",
       "Sillvia"
     ],
     "contact": {
-      "homepage": "",
+      "homepage": "https://modrinth.com/mod/decomod",
       "sources": ""
     },
   
