@@ -1,17 +1,18 @@
 {
-    "required": true,
-    "minVersion": "0.8",
-    "package": "com.williambl.decomod.mixin",
-    "compatibilityLevel": "JAVA_17",
-    "mixins": [
-        "wallpaper.LevelMixin"
-    ],
-    "client": [
-        "client.wallpaper.ModelManagerMixin"
-    ],
-    "injectors": {
-        "defaultRequire": 1
-    },
-    "refmap": "${refmap_target}refmap.json"
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.williambl.decomod.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "wallpaper.LevelMixin"
+  ],
+  "client": [
+    "client.wallpaper.ModelManagerMixin",
+    "client.wallpaper.RenderChunkMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "refmap": "${refmap_target}refmap.json"
   }
   

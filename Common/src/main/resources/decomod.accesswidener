@@ -3,3 +3,7 @@ accessible class net/minecraft/client/gui/screens/MenuScreens$ScreenConstructor
 accessible field net/minecraft/client/renderer/LevelRenderer viewArea Lnet/minecraft/client/renderer/ViewArea;
 accessible field net/minecraft/world/level/block/CrossCollisionBlock stateToIndex Lit/unimi/dsi/fastutil/objects/Object2IntMap;
 accessible method net/minecraft/world/level/block/CrossCollisionBlock indexFor (Lnet/minecraft/core/Direction;)I
+accessible class net/minecraft/client/renderer/block/ModelBlockRenderer$AmbientOcclusionFace
+accessible method net/minecraft/client/renderer/block/ModelBlockRenderer calculateShape (Lnet/minecraft/world/level/BlockAndTintGetter;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;[ILnet/minecraft/core/Direction;[FLjava/util/BitSet;)V
+accessible field net/minecraft/client/renderer/block/ModelBlockRenderer$AmbientOcclusionFace brightness [F
+accessible field net/minecraft/client/renderer/block/ModelBlockRenderer$AmbientOcclusionFace lightmap [I

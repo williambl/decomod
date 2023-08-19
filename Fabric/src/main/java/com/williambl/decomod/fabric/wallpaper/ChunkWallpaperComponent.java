@@ -3,7 +3,7 @@ package com.williambl.decomod.fabric.wallpaper;
 import com.mojang.serialization.Codec;
 import com.williambl.decomod.Constants;
 import com.williambl.decomod.DMRegistry;
-import com.williambl.decomod.DecoMod;
+import com.williambl.decomod.client.WallpaperRenderer;
 import com.williambl.decomod.wallpaper.WallpaperChunk;
 import com.williambl.decomod.wallpaper.WallpaperType;
 import dev.onyxstudios.cca.api.v3.component.Component;
@@ -101,6 +101,7 @@ public class ChunkWallpaperComponent implements WallpaperChunk, Component, AutoS
             this.wallpapers.put(blockPos, map);
             Minecraft.getInstance().levelRenderer.setBlocksDirty(blockPos.getX()-1, blockPos.getY()-1, blockPos.getZ()-1, blockPos.getX()+1, blockPos.getY()+1, blockPos.getZ()+1);
         }
+        WallpaperRenderer.CACHE.markDirty(this.chunk.getPos());
     }
 
     @Override
