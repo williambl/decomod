@@ -15,6 +15,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -36,8 +37,10 @@ public final class WallpaperRenderer {
             Level level,
             ExtendedModelManager modelManager,
             Camera camera,
-            int chunkViewDistance
+            int chunkViewDistance,
+            ProfilerFiller profiler
     ) {
+        profiler.push("wallpaperRendering");
         poseStack.pushPose();
         poseStack.translate(-camera.getPosition().x(), -camera.getPosition().y(), -camera.getPosition().z());
         getChunkPositions(camera, chunkViewDistance).forEach(chunkPos -> {
@@ -54,6 +57,7 @@ public final class WallpaperRenderer {
             }
         });
         poseStack.popPose();
+        profiler.pop();
     }
 
     private static Stream<ChunkPos> getChunkPositions(Camera camera, int chunkViewDistance) {

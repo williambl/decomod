@@ -69,7 +69,8 @@ public class FabricClientHelper implements IClientHelper {
                     level,
                     modelManager,
                     camera,
-                    viewDistance
+                    viewDistance,
+                    ctx.profiler()
             );
         });
     }

@@ -10,6 +10,7 @@ import dev.onyxstudios.cca.api.v3.component.Component;
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -30,6 +31,7 @@ import java.util.function.Function;
 import static com.williambl.decomod.DecoMod.id;
 
 public class ChunkWallpaperComponent implements WallpaperChunk, Component, AutoSyncedComponent {
+    private static int totalBytesSent = 0;
     public static final ComponentKey<ChunkWallpaperComponent> KEY = ComponentRegistry.getOrCreate(id("wallpaper"), ChunkWallpaperComponent.class);
     private static final Codec<Map<BlockPos, EnumMap<Direction, WallpaperType>>> WALLPAPERS_CODEC
             = Codec.unboundedMap(Codec.STRING.xmap(Long::parseLong, Object::toString).xmap(BlockPos::of, BlockPos::asLong), Codec.unboundedMap(Direction.CODEC, DMRegistry.WALLPAPER_REGISTRY.get().byNameCodec()).xmap(EnumMap::new, Function.identity()));
@@ -64,6 +66,7 @@ public class ChunkWallpaperComponent implements WallpaperChunk, Component, AutoS
 
     @Override
     public void writeSyncPacket(FriendlyByteBuf buf, ServerPlayer recipient) {
+        int baseIndex = buf.writerIndex();
         this.clearEmptyMaps();
         buf.writeVarInt(this.wallpapers.size());
         for (var entry : this.wallpapers.entrySet()) {
@@ -73,6 +76,11 @@ public class ChunkWallpaperComponent implements WallpaperChunk, Component, AutoS
                 buf.writeEnum(entry2.getKey());
                 buf.writeVarInt(DMRegistry.WALLPAPER_REGISTRY.get().getId(entry2.getValue()));
             }
+        }
+        if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+            Constants.LOGGER.info("Syncing a chunk. Sending {} bytes.", buf.writerIndex() - baseIndex);
+            totalBytesSent += (buf.writerIndex() - baseIndex);
+            Constants.LOGGER.info("Total bytes sent: {}", totalBytesSent);
         }
     }
 
