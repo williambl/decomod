@@ -19,4 +19,9 @@ public class RenderChunkMixin {
     private void decomod$setWallpapersDirty(boolean $$0, CallbackInfo ci) {
         WallpaperRenderer.CACHE.markDirty(new ChunkPos(this.origin));
     }
+
+    @Inject(method = "reset", at = @At("HEAD"))
+    private void decomod$setWallpapersDirtyWhenReset(CallbackInfo ci) {
+        WallpaperRenderer.CACHE.markDirty(new ChunkPos(this.origin));
+    }
 }
