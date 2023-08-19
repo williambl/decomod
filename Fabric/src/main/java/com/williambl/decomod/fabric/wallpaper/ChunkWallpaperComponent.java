@@ -65,9 +65,16 @@ public class ChunkWallpaperComponent implements WallpaperChunk, Component, AutoS
     }
 
     @Override
+    public boolean shouldSyncWith(ServerPlayer player) {
+        return !this.wallpapers.isEmpty();
+    }
+
+    // writes a full sync packet
+    @Override
     public void writeSyncPacket(FriendlyByteBuf buf, ServerPlayer recipient) {
         int baseIndex = buf.writerIndex();
         this.clearEmptyMaps();
+        buf.writeEnum(SyncMode.FULL);
         buf.writeVarInt(this.wallpapers.size());
         for (var entry : this.wallpapers.entrySet()) {
             buf.writeBlockPos(entry.getKey());
@@ -84,13 +91,53 @@ public class ChunkWallpaperComponent implements WallpaperChunk, Component, AutoS
         }
     }
 
+    public void writeIncrementalSyncPacket(FriendlyByteBuf buf, Map<BlockPos, Collection<Direction>> removed, Map<BlockPos, Collection<Map.Entry<Direction, WallpaperType>>> added) {
+        int baseIndex = buf.writerIndex();
+        this.clearEmptyMaps();
+        buf.writeEnum(SyncMode.INCREMENTAL);
+        {
+            buf.writeVarInt(removed.size());
+            for (var entry : removed.entrySet()) {
+                buf.writeBlockPos(entry.getKey());
+                buf.writeByte(entry.getValue().size());
+                for (var dir : entry.getValue()) {
+                    buf.writeEnum(dir);
+                }
+            }
+        }
+        {
+            buf.writeVarInt(added.size());
+            for (var entry : added.entrySet()) {
+                buf.writeBlockPos(entry.getKey());
+                buf.writeByte(entry.getValue().size());
+                for (var entry2 : entry.getValue()) {
+                    buf.writeEnum(entry2.getKey());
+                    buf.writeVarInt(DMRegistry.WALLPAPER_REGISTRY.get().getId(entry2.getValue()));
+                }
+            }
+        }
+        if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+            Constants.LOGGER.info("Syncing a chunk. Sending {} bytes.", buf.writerIndex() - baseIndex);
+            totalBytesSent += (buf.writerIndex() - baseIndex);
+            Constants.LOGGER.info("Total bytes sent: {}", totalBytesSent);
+        }
+    }
+
     @Override
     public void applySyncPacket(FriendlyByteBuf buf) {
+        SyncMode mode = buf.readEnum(SyncMode.class);
+        switch (mode) {
+            case FULL -> this.applyFullSyncPacket(buf);
+            case INCREMENTAL -> this.applyIncrementalSyncPacket(buf);
+        }
+    }
+
+    void applyFullSyncPacket(FriendlyByteBuf buf) {
         int numEntries = buf.readVarInt();
         var wallpaperPositions = new HashSet<>(this.wallpapers.keySet());
         wallpaperPositions.forEach(blockPos -> Minecraft.getInstance().levelRenderer.setBlocksDirty(blockPos.getX()-1, blockPos.getY()-1, blockPos.getZ()-1, blockPos.getX()+1, blockPos.getY()+1, blockPos.getZ()+1));
 
-        this.wallpapers.clear(); //TODO: do this better
+        this.wallpapers.clear();
         for (int i = 0; i < numEntries; i++) {
             var blockPos = buf.readBlockPos();
             int numEntries2 = buf.readByte();
@@ -104,6 +151,40 @@ public class ChunkWallpaperComponent implements WallpaperChunk, Component, AutoS
         WallpaperRenderer.CACHE.markDirty(this.chunk.getPos());
     }
 
+    private void applyIncrementalSyncPacket(FriendlyByteBuf buf) {
+        Set<BlockPos> changedBlockPoses = new HashSet<>();
+        {
+            int numRemoved = buf.readVarInt();
+            for (int i = 0; i < numRemoved; i++) {
+                var pos = buf.readBlockPos();
+                changedBlockPoses.add(pos);
+                var wallpapersForPos = this.wallpapers.get(pos);
+                int numEntries = buf.readByte();
+                for (int j = 0; j < numEntries; j++) {
+                    if (wallpapersForPos != null) {
+                        wallpapersForPos.remove(buf.readEnum(Direction.class));
+                    }
+                }
+            }
+        }
+        {
+            int numAdded = buf.readVarInt();
+            for (int i = 0; i < numAdded; i++) {
+                var pos = buf.readBlockPos();
+                changedBlockPoses.add(pos);
+                var wallpapersForPos = this.wallpapers.computeIfAbsent(pos, $ -> new EnumMap<>(Direction.class));
+                int numEntries = buf.readByte();
+                for (int j = 0; j < numEntries; j++) {
+                    var dir = buf.readEnum(Direction.class);
+                    var wallpaper = DMRegistry.WALLPAPER_REGISTRY.get().byId(buf.readVarInt());
+                    wallpapersForPos.put(dir, wallpaper);
+                }
+            }
+        }
+
+        changedBlockPoses.forEach(blockPos -> Minecraft.getInstance().levelRenderer.setBlocksDirty(blockPos.getX()-1, blockPos.getY()-1, blockPos.getZ()-1, blockPos.getX()+1, blockPos.getY()+1, blockPos.getZ()+1));
+    }
+
     @Override
     public WallpaperType addWallpaper(BlockPos pos, Direction dir, WallpaperType data) {
         var res = this.wallpapers.compute(pos, ($, m) -> {
@@ -115,7 +196,7 @@ public class ChunkWallpaperComponent implements WallpaperChunk, Component, AutoS
         }).get(dir);
 
         this.chunk.setUnsaved(true);
-        KEY.sync(this.chunk);
+        KEY.sync(this.chunk, (buf, p) -> this.writeIncrementalSyncPacket(buf, Map.of(), Map.of(pos, List.of(Map.entry(dir, data)))), $ -> true);
         return res;
     }
 
@@ -128,7 +209,7 @@ public class ChunkWallpaperComponent implements WallpaperChunk, Component, AutoS
 
         var res = enumMap.remove(dir);
         this.chunk.setUnsaved(true);
-        KEY.sync(this.chunk);
+        KEY.sync(this.chunk, (buf, p) -> this.writeIncrementalSyncPacket(buf, Map.of(pos, List.of(dir)), Map.of()), $ -> true);
         if (res != null && this.chunk instanceof LevelChunk levelChunk && levelChunk.getLevel() instanceof ServerLevel level) {
             var item = DMRegistry.WALLPAPER_ITEMS.apply(res);
             var offset = Vec3.atLowerCornerOf(dir.getNormal()).scale(0.6);
@@ -142,6 +223,9 @@ public class ChunkWallpaperComponent implements WallpaperChunk, Component, AutoS
     @Override
     public void removeWallpaper(BlockPos pos) {
         var wallpapers = this.wallpapers.remove(pos);
+        if (wallpapers != null) {
+            KEY.sync(this.chunk, (buf, p) -> this.writeIncrementalSyncPacket(buf, Map.of(pos, wallpapers.keySet()), Map.of()), $ -> true);
+        }
         if (wallpapers != null && this.chunk instanceof LevelChunk levelChunk && levelChunk.getLevel() instanceof ServerLevel level) {
             for (var wallpaper : wallpapers.values()) {
                 var item = DMRegistry.WALLPAPER_ITEMS.apply(wallpaper);
@@ -156,5 +240,11 @@ public class ChunkWallpaperComponent implements WallpaperChunk, Component, AutoS
     @Override
     public Iterator<Map.Entry<BlockPos, EnumMap<Direction, WallpaperType>>> iterator() {
         return this.wallpapers.entrySet().iterator();
+    }
+
+    private enum SyncMode {
+        FULL,
+        INCREMENTAL,
+        ;
     }
 }
