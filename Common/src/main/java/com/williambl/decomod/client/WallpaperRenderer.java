@@ -43,6 +43,7 @@ public final class WallpaperRenderer {
             ProfilerFiller profiler
     ) {
         profiler.push("wallpaperRendering");
+        CACHE.setLevel(level.dimension());
         RenderType renderType = RenderType.cutoutMipped();
         var vertexConsumer = buffers.getBuffer(renderType);
         poseStack.pushPose();
